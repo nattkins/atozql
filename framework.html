@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Framework — ZQL</title>
+<meta name="description" content="Every organisation lies to itself. The question is where. A diagnostic framework for organisational pathology — using only public signals.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+
+<style>
+
+.nav-mark { font-family:var(--serif); font-size:1.35rem; color:#fff; letter-spacing:0.04em; text-decoration:none; }
+.nav-mark span { color:var(--gold); }
+.nav-links { display:flex; gap:2rem; align-items:center; }
+.nav-links a { color:var(--text-light); text-decoration:none; font-size:0.82rem; font-weight:500; letter-spacing:0.03em; transition:color 0.2s; }
+.nav-links a:hover { color:#fff; }
+.nav-cta { background:var(--gold)!important; color:var(--navy)!important; padding:0.45rem 1.1rem; border-radius:4px; font-weight:600!important; }
+.nav-mobile { display:none; background:none; border:none; cursor:pointer; padding:0.5rem; }
+.nav-mobile svg { width:24px; height:24px; color:#fff; }
+.section-label { font-size:0.72rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); margin-bottom:0.8rem; }
+.section-heading { font-family:var(--serif); font-size:clamp(2rem,4vw,2.8rem); color:var(--text-dark); margin-bottom:0.6em; line-height:1.15; }
+.section-heading--light { color:#fff; }
+.section-sub { font-size:1.05rem; color:var(--text-muted); max-width:620px; line-height:1.7; margin-bottom:2.5rem; }
+section { padding:5.5rem 2rem; }
+.highlight { background:var(--gold-dim); border-left:3px solid var(--gold); padding:1.2rem 1.5rem; border-radius:0 4px 4px 0; margin:1.5rem 0; }
+.highlight p { margin-bottom:0; color:var(--text-dark); font-weight:500; }
+.one-liner { background:var(--navy); border-radius:6px; padding:1.8rem 2.5rem; margin:2rem 0; }
+.one-liner p { font-family:var(--serif); font-style:italic; font-size:1.1rem; color:var(--text-on-dark); text-align:center; line-height:1.6; }
+.one-liner p strong { color:var(--gold); }
+.expandable { border:1px solid rgba(27,37,65,0.08); border-radius:6px; margin-bottom:0.75rem; overflow:hidden; }
+.expandable-header { padding:1.1rem 1.5rem; background:var(--cream); cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background 0.2s; }
+.expandable-header:hover { background:var(--cream-warm); }
+.expandable-header h3 { font-family:var(--serif); font-size:1.1rem; color:var(--text-dark); margin:0; }
+.expandable-toggle { font-size:1.2rem; color:var(--gold); transition:transform 0.3s; }
+.expandable.open .expandable-toggle { transform:rotate(180deg); }
+.expandable-content { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
+.expandable.open .expandable-content { max-height:5000px; }
+.expandable-inner { padding:1.5rem; background:#fff; }
+.table-wrap { overflow-x:auto; margin:1.5rem 0; }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+th, td { padding:0.75rem 1rem; text-align:left; border-bottom:1px solid rgba(27,37,65,0.08); }
+th { background:var(--cream); font-weight:600; color:var(--text-dark); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; }
+code { font-family:var(--mono); font-size:0.85em; background:var(--cream); padding:0.15em 0.4em; border-radius:3px; color:var(--text-dark); }
+pre { background:var(--navy); color:var(--text-on-dark); padding:1.5rem; border-radius:6px; overflow-x:auto; font-size:0.8rem; line-height:1.6; margin:1.5rem 0; }
+pre code { background:none; padding:0; color:inherit; }
+footer { background:var(--navy); padding:2.5rem 2rem; text-align:center; }
+.footer-entity { color:var(--text-muted); font-size:0.8rem; margin-bottom:0.3rem; }
+.footer-note { color:rgba(255,255,255,0.25); font-size:0.72rem; font-style:italic; }
+.reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* HERO */
+.fw-hero { background:var(--navy-deep); padding:7rem 2rem 4.5rem; position:relative; }
+.fw-hero::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gold); }
+.fw-hero-inner { max-width:800px; margin:0 auto; }
+.fw-hero h1 { font-family:var(--serif); font-size:clamp(2.4rem,5vw,3.4rem); color:#fff; line-height:1.08; margin-bottom:1.2rem; }
+.fw-hero h1 em { color:var(--gold); font-style:italic; }
+.fw-hero-sub { font-size:1.05rem; color:var(--text-on-dark); line-height:1.75; max-width:620px; }
+
+/* DIALOGUES */
+.dialogue-section { background:var(--offwhite); padding:5rem 2rem; }
+.dialogue-inner { max-width:920px; margin:0 auto; }
+.dialogue-scene { border:1px solid rgba(27,37,65,0.06); border-bottom:none; background:#fff; overflow:hidden; }
+.dialogue-scene:first-child { border-radius:6px 6px 0 0; }
+.dialogue-scene:last-child { border-bottom:1px solid rgba(27,37,65,0.06); border-radius:0 0 6px 6px; }
+.dialogue-scene-header { padding:1rem 1.5rem 0.6rem; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+.dialogue-scene-header h3 { font-family:var(--serif); font-size:1.02rem; color:var(--text-dark); margin:0; }
+.scene-badge { font-family:var(--mono); font-size:0.65rem; color:var(--text-light); letter-spacing:0.08em; background:var(--cream); padding:0.25rem 0.6rem; border-radius:3px; white-space:nowrap; margin-left:0.8rem; }
+.scene-oneliner { padding:0 1.5rem 1rem; font-size:0.88rem; color:var(--text-muted); line-height:1.55; }
+.dialogue-body { padding:0 1.5rem 1.5rem; display:none; }
+.dialogue-scene.open .dialogue-body { display:block; }
+.dialogue-exchange { margin-bottom:1.5rem; }
+.dialogue-exchange-label { font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.6rem; font-weight:600; color:var(--red-no); }
+.dialogue-exchange-label.fix { color:var(--green-yes); }
+.d-line { display:grid; grid-template-columns:42px 1fr; gap:0.6rem; margin-bottom:0.45rem; align-items:start; }
+.d-who { font-family:var(--mono); font-size:0.72rem; font-weight:600; color:var(--gold); padding-top:0.15rem; text-align:right; }
+.d-says { font-size:0.88rem; color:var(--text-body); line-height:1.55; }
+.d-says em { color:var(--text-muted); font-style:italic; }
+.d-says strong { color:var(--text-dark); }
+.dialogue-diagnosis { background:var(--cream); border-radius:4px; padding:1rem 1.2rem; margin-top:0.8rem; }
+.dialogue-diagnosis p { font-size:0.82rem; color:var(--text-body); line-height:1.55; margin:0; }
+.dialogue-diagnosis strong { color:var(--text-dark); }
+.dialogue-diagnosis code { font-size:0.78rem; }
+
+/* ARCHETYPES */
+.arch-section { background:var(--navy); padding:5rem 2rem; }
+.arch-inner { max-width:1000px; margin:0 auto; }
+.arch-grid { display:grid; grid-template-columns:repeat(5, 1fr); gap:0.9rem; margin:2.5rem 0 2rem; }
+.arch-card { background:var(--navy-light); border-radius:6px; padding:1.4rem 1.1rem; border-top:3px solid var(--gold); transition:transform 0.2s; }
+.arch-card:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,0.3); }
+.arch-card h3 { font-family:var(--serif); color:#fff; font-size:1rem; margin-bottom:0.4rem; }
+.arch-sig { font-size:0.76rem; color:var(--gold-soft); font-style:italic; margin-bottom:0.7rem; line-height:1.4; }
+.arch-tell { font-size:0.76rem; color:var(--text-on-dark); line-height:1.5; margin-bottom:0.5rem; }
+.arch-tell strong { color:var(--gold); }
+.arch-prognosis { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.08em; padding:0.25rem 0.55rem; border-radius:3px; display:inline-block; margin-top:0.3rem; }
+.prognosis-terminal { background:rgba(139,58,58,0.3); color:#e07070; }
+.prognosis-recoverable { background:rgba(201,168,76,0.15); color:var(--gold-soft); }
+.prognosis-moderate { background:rgba(201,168,76,0.1); color:var(--text-light); }
+.prognosis-maintain { background:rgba(45,106,79,0.2); color:#7cc9a0; }
+.case-callout { background:var(--navy-deep); border-radius:6px; padding:1.8rem 2.2rem; margin:1.5rem 0; border-left:3px solid var(--gold); }
+.case-callout-label { font-family:var(--mono); font-size:0.65rem; color:var(--gold); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.5rem; }
+.case-callout blockquote { font-family:var(--serif); font-style:italic; font-size:1.05rem; color:#fff; line-height:1.5; margin-bottom:0.6rem; }
+.case-callout .case-who { font-size:0.8rem; color:var(--text-muted); }
+.case-callout .case-outcome { font-size:0.82rem; color:var(--red-no); font-weight:600; margin-top:0.4rem; }
+
+/* KILLER QUESTION */
+.killer-section { background:var(--cream); padding:5rem 2rem; }
+.killer-inner { max-width:800px; margin:0 auto; text-align:center; }
+.killer-q { font-family:var(--serif); font-style:italic; font-size:clamp(1.3rem,3vw,1.7rem); color:var(--text-dark); line-height:1.4; margin:1.5rem 0; padding:2rem 2.5rem; background:#fff; border-radius:6px; border-bottom:3px solid var(--gold); position:relative; }
+.killer-q::before { content:'\201C'; font-family:var(--serif); font-size:4rem; color:var(--gold); position:absolute; top:0.1rem; left:1rem; line-height:1; opacity:0.4; }
+.killer-responses { display:grid; grid-template-columns:repeat(4, 1fr); gap:0.8rem; margin:1.5rem 0; text-align:left; }
+.killer-resp { background:#fff; border-radius:6px; padding:1rem; }
+.killer-resp-lag { font-family:var(--mono); font-size:0.82rem; font-weight:600; margin-bottom:0.3rem; }
+.killer-resp-lag.healthy { color:var(--green-yes); }
+.killer-resp-lag.friction { color:var(--gold); }
+.killer-resp-lag.toxic { color:var(--red-no); }
+.killer-resp-lag.broken { color:#6a2020; }
+.killer-resp p { font-size:0.78rem; color:var(--text-muted); line-height:1.5; }
+
+/* DIAGNOSTIC LEVELS */
+.diag-section { background:var(--offwhite); padding:5rem 2rem; }
+.diag-inner { max-width:900px; margin:0 auto; }
+.diag-level { background:#fff; padding:1.8rem 2.2rem; border-left:3px solid var(--navy); position:relative; }
+.diag-level::before { content:''; position:absolute; left:-8px; top:1.8rem; width:13px; height:13px; background:var(--gold); border-radius:50%; border:3px solid var(--offwhite); }
+.diag-level-label { font-family:var(--mono); font-size:0.65rem; color:var(--gold); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.3rem; }
+.diag-level h4 { font-family:var(--serif); font-size:1.1rem; color:var(--text-dark); margin-bottom:0.4rem; }
+.diag-level p { font-size:0.88rem; color:var(--text-body); line-height:1.7; margin-bottom:0.5rem; }
+.diag-questions { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.6rem; margin-top:0.8rem; }
+.diag-q { background:var(--cream); border-radius:4px; padding:0.7rem 0.9rem; }
+.diag-q-num { font-family:var(--mono); font-size:0.68rem; color:var(--gold); margin-bottom:0.15rem; }
+.diag-q p { font-size:0.78rem; color:var(--text-dark); line-height:1.4; margin:0; font-weight:500; }
+.diag-outcomes { display:flex; gap:0.6rem; margin-top:0.8rem; flex-wrap:wrap; }
+.diag-outcome { font-size:0.75rem; padding:0.35rem 0.7rem; border-radius:4px; font-weight:500; }
+.diag-outcome.blind { background:rgba(139,58,58,0.1); color:var(--red-no); }
+.diag-outcome.pass { background:rgba(45,106,79,0.1); color:var(--green-yes); }
+.diag-outcome.mixed { background:var(--gold-dim); color:var(--gold); }
+
+/* THEORY */
+.theory-section { background:var(--cream); padding:5rem 2rem; }
+.theory-inner { max-width:900px; margin:0 auto; }
+.dim-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:1rem; margin:2rem 0; }
+.dim-card { background:#fff; border-radius:6px; padding:1.3rem; border-top:3px solid var(--gold); text-align:center; }
+.dim-card-icon { font-size:1.6rem; margin-bottom:0.5rem; }
+.dim-card h3 { font-family:var(--serif); font-size:1rem; color:var(--text-dark); margin-bottom:0.3rem; }
+.dim-card p { font-size:0.8rem; color:var(--text-muted); line-height:1.5; }
+.shapes-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:0.8rem; margin:1.2rem 0; }
+.shape-card { background:#fff; border-radius:6px; padding:1rem; border-left:3px solid var(--gold); }
+.shape-card h4 { font-family:var(--serif); font-size:0.95rem; color:var(--text-dark); margin-bottom:0.2rem; }
+.shape-card p { font-size:0.8rem; color:var(--text-muted); margin-bottom:0; }
+.shape-card code { font-size:0.72rem; }
+.worlds-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:0.8rem; margin:1.2rem 0; }
+.world-card { background:var(--navy); border-radius:6px; padding:1.3rem; text-align:center; }
+.world-card h4 { font-family:var(--serif); color:var(--gold); font-size:1rem; margin-bottom:0.4rem; }
+.world-card p { color:var(--text-on-dark); font-size:0.82rem; margin-bottom:0; }
+.spectrum { background:#fff; border-radius:6px; padding:1.5rem; margin:1.2rem 0; }
+.spectrum-bar { display:flex; border-radius:6px; overflow:hidden; margin-bottom:1rem; }
+.spectrum-segment { flex:1; padding:1.3rem 0.8rem; text-align:center; }
+.spectrum-segment:nth-child(1) { background:var(--red-no); color:#fff; }
+.spectrum-segment:nth-child(2) { background:var(--green-yes); color:#fff; }
+.spectrum-segment:nth-child(3) { background:var(--navy); color:#fff; }
+.spectrum-segment h4 { font-family:var(--serif); font-size:0.95rem; margin-bottom:0.2rem; }
+.spectrum-segment p { font-size:0.75rem; opacity:0.85; margin-bottom:0; }
+.spectrum-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.6); margin-bottom:0.2rem; }
+.poly-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:0.8rem; margin:1.2rem 0; }
+.poly-card { background:#fff; border-radius:6px; padding:1.3rem; border-bottom:3px solid var(--gold); }
+.poly-card h4 { font-family:var(--mono); font-size:1rem; color:var(--gold); margin-bottom:0.3rem; }
+.poly-card .formula { font-family:var(--mono); font-size:0.78rem; color:var(--text-muted); margin-bottom:0.6rem; }
+.poly-card p { font-size:0.82rem; color:var(--text-body); margin-bottom:0; }
+.vsm-table { margin:1.2rem 0; }
+.vsm-row { display:grid; grid-template-columns:70px 1fr 1fr 1fr; gap:0.8rem; padding:0.8rem; border-bottom:1px solid rgba(27,37,65,0.08); align-items:center; font-size:0.82rem; }
+.vsm-row:last-child { border-bottom:none; }
+.vsm-system { font-family:var(--mono); font-weight:600; color:var(--gold); }
+.matrix-container { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:1.5rem 0; }
+.matrix { background:#fff; border-radius:6px; padding:1.2rem; }
+.matrix h4 { font-family:var(--mono); font-size:0.82rem; color:var(--text-dark); margin-bottom:0.8rem; text-align:center; }
+.matrix-grid { display:grid; grid-template-columns:auto 1fr 1fr; gap:0; font-size:0.72rem; }
+.matrix-cell { padding:0.55rem 0.45rem; text-align:center; border:1px solid rgba(27,37,65,0.08); }
+.matrix-cell.header { background:var(--cream); font-weight:600; color:var(--text-dark); }
+.matrix-cell.stuck { background:rgba(139,58,58,0.06); color:var(--red-no); font-weight:600; }
+.matrix-cell.optimal { background:rgba(45,106,79,0.06); color:var(--green-yes); font-weight:600; }
+.matrix-cell.impossible { background:var(--cream); color:var(--text-muted); }
+
+/* CTA */
+.cta-section { background:var(--navy-deep); text-align:center; padding:5.5rem 2rem; position:relative; }
+.cta-section::before { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:var(--gold); }
+.cta-heading { font-family:var(--serif); font-size:clamp(2rem,4vw,2.8rem); color:#fff; margin-bottom:0.4em; line-height:1.15; }
+.cta-sub { font-size:1.05rem; color:var(--text-light); max-width:520px; margin:0 auto 2.5rem; line-height:1.7; }
+.cta-button { display:inline-flex; align-items:center; gap:0.6rem; background:var(--gold); color:var(--navy); padding:0.9rem 2.2rem; border-radius:5px; text-decoration:none; font-weight:600; font-size:1rem; transition:all 0.25s; }
+.cta-button:hover { background:var(--gold-soft); transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,168,76,0.25); }
+.cta-button svg { width:18px; height:18px; }
+
+@media (max-width:900px) {
+  .nav-links { display:none; }
+  .nav-links.open { display:flex; flex-direction:column; position:absolute; top:60px; left:0; right:0; background:var(--navy-deep); padding:1.5rem 2rem; gap:1.2rem; border-bottom:1px solid rgba(201,168,76,0.12); }
+  .nav-mobile { display:block; }
+  .arch-grid { grid-template-columns:1fr 1fr; }
+  .killer-responses { grid-template-columns:1fr 1fr; }
+  .diag-questions { grid-template-columns:1fr; }
+  .dim-grid { grid-template-columns:repeat(2, 1fr); }
+  .shapes-grid, .worlds-grid, .poly-grid { grid-template-columns:1fr; }
+  .spectrum-bar { flex-direction:column; }
+  .vsm-row { grid-template-columns:1fr; gap:0.3rem; }
+  .matrix-container { grid-template-columns:1fr; }
+  .cure-grid-3 { grid-template-columns:1fr !important; }
+  section { padding:4.5rem 1.5rem; }
+}
+@media (max-width:600px) {
+  .arch-grid { grid-template-columns:1fr; }
+  .killer-responses { grid-template-columns:1fr; }
+  nav { padding:0 1rem; }
+  .d-line { grid-template-columns:36px 1fr; }
+}
+/* Section nav / TOC */
+.section-nav {
+  position: sticky;
+  top: 60px;
+  z-index: 90;
+  background: rgba(253,252,250,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(27,37,65,0.08);
+  transition: box-shadow 0.3s;
+}
+.section-nav.shadowed { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.section-nav-inner {
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.section-nav-inner::-webkit-scrollbar { display: none; }
+.section-nav-link {
+  padding: 0.75rem 1.1rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  transition: color 0.2s;
+}
+.section-nav-link:hover { color: var(--text-dark); }
+.section-nav-link.active { color: var(--text-dark); font-weight: 600; }
+.section-nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 1.1rem; right: 1.1rem;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 1px;
+}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="./" class="nav-mark">Z<span>Q</span>L</a>
+  <div class="nav-links" id="navLinks">
+    <a href="./#questions">The Questions</a>
+    <a href="./#how">How It Works</a>
+    <a href="./framework.html" style="color:#fff;">Framework</a>
+    <a href="./#portfolio">Portfolio</a>
+    <a href="./#compare">Why ZQL</a>
+    <a href="./#cta" class="nav-cta">Book a Call</a>
+  </div>
+  <button class="nav-mobile" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</nav>
+
+<section class="fw-hero">
+  <div class="fw-hero-inner">
+    <div class="section-label">The Polynomial Diagnostic Framework</div>
+    <h1>Every organisation lies to itself.<br>The question is <em>where.</em></h1>
+    <p class="fw-hero-sub">In the current game, the rational move is to lie. We don't build better data pipes. We design better games — where truth-telling is the dominant strategy. Five pathologies. Three tells. One question that makes CFOs go quiet.</p>
+  </div>
+</section>
+
+<!-- DIALOGUES -->
+<!-- Section nav / TOC -->
+<div id="sectionNav" class="section-nav">
+  <div class="section-nav-inner">
+    <a href="#dialogues" class="section-nav-link active" data-section="dialogues">Conversations</a>
+    <a href="#archetypes" class="section-nav-link" data-section="archetypes">Archetypes</a>
+    <a href="#killer" class="section-nav-link" data-section="killer">The Question</a>
+    <a href="#diagnostic" class="section-nav-link" data-section="diagnostic">Diagnostic</a>
+    <a href="#theory" class="section-nav-link" data-section="theory">Theory</a>
+    <a href="#cure" class="section-nav-link" data-section="cure">The Cure</a>
+  </div>
+</div>
+
+<section class="dialogue-section" id="dialogues">
+  <div class="dialogue-inner">
+    <div class="section-label">What Goes Wrong</div>
+    <h2 class="section-heading">Five Conversations That Fail Every Day</h2>
+    <p class="section-sub">These aren't hypothetical. These are real conversations between different layers of an organisation — failing because each layer speaks a different geometric language. Read them and count how many you've had this week.</p>
+
+    <div>
+
+      <!-- S5 → S1 -->
+      <div class="dialogue-scene" id="ds1">
+        <div class="dialogue-scene-header" onclick="toggleScene('ds1')">
+          <h3>"We're a quality-first organisation." — "So… do we ship?"</h3>
+          <span class="scene-badge">S5 → S1</span>
+        </div>
+        <div class="scene-oneliner">Identity speaks in filters. Operations needs a yes or a no.</div>
+        <div class="dialogue-body">
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label">The Mismatch</div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"We're a quality-first organisation. That's non-negotiable."</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"OK but… what do we DO differently on Monday?"</span></div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"You embody quality in everything."</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"But like… specifically? The Thursday order is behind. Do we ship partial?"</span></div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"You need to internalise the values…"</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says"><em>Ships partial. Gets blamed.</em></span></div>
+          </div>
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label fix">The Bridge</div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"Quality-first means: when there's a choice between on-time and complete, <strong>which slot wins?</strong>"</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"…complete?"</span></div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"Yes. The 'ship complete' SLOT beats the 'ship on-time' SLOT."</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"So Thursday's order — if we can't do both, we delay and ship complete?"</span></div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"Yes. And you log <strong>why</strong> in the STACK. That's the quality story."</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"Got it. Delay, complete, document."</span></div>
+          </div>
+          <div class="dialogue-diagnosis">
+            <p><strong>Diagnosis:</strong> S5 broadcast a <code>SIEVE</code> (quality-first filter) and a <code>SLOT</code> (who we are). S1 needed a <code>STACK</code>-compatible instruction — what happens next, in what order. The bridge works because S5 translated their filter into <strong>slot-priority language</strong> that operations can act on.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- S3 → S1 -->
+      <div class="dialogue-scene" id="ds2">
+        <div class="dialogue-scene-header" onclick="toggleScene('ds2')">
+          <h3>"What's our cost per unit?" — "Line 3 had a jam. Dave called in sick."</h3>
+          <span class="scene-badge">S3 → S1</span>
+        </div>
+        <div class="scene-oneliner">Control asks for aggregates. Operations only has sequences of events.</div>
+        <div class="dialogue-body">
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label">The Mismatch</div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"What's our total cost per unit across all production lines?"</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says"><em>Blank stare.</em> "I… we run the machines. Line 3 had a jam this morning. Dave called in sick. We're behind on the Thursday order."</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"But what's the <strong>cost</strong>?"</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"I don't… we don't… that's not how we see it?"</span></div>
+          </div>
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label fix">The Bridge</div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"And when Line 3 runs for an hour, <strong>what happens?</strong>"</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"We use about 40kg of material, maybe 15kWh power, and produce around 200 units."</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"And what happens after that?"</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"Then we log it and move to the next batch."</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"And where does that log go?"</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"Into the shift report. Here, I can show you yesterday's…"</span></div>
+          </div>
+          <div class="dialogue-diagnosis">
+            <p><strong>Diagnosis:</strong> S3 asked for a <code>SACK</code> (aggregate). S1 only produces <code>STACK</code>s (sequences) and <code>SLOT</code>s (status). The bridge works by asking in S1's language — <strong>what happens next?</strong> — then aggregating the STACKs into SACKs at the right level.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- S1 → S3 -->
+      <div class="dialogue-scene" id="ds3">
+        <div class="dialogue-scene-header" onclick="toggleScene('ds3')">
+          <h3>"Do we run overtime tonight?" — "94% budget utilisation with 2.3% variance…"</h3>
+          <span class="scene-badge">S1 → S3</span>
+        </div>
+        <div class="scene-oneliner">Operations needs a yes/no. Control answers with portfolios and percentages.</div>
+        <div class="dialogue-body">
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label">The Mismatch</div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"We need to know if we should run overtime tonight."</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"The Q3 resource allocation shows we're at 94% budget utilisation with a 2.3% variance against forecast…"</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"But… do we run the machines tonight or not?"</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"It depends on the weighted cost-benefit across the portfolio…"</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says"><em>Walks away. Runs overtime anyway. Gets blamed later.</em></span></div>
+          </div>
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label fix">The Bridge</div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"The Thursday order — <strong>is its slot green or red</strong> right now?"</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"Let me check… it's amber. Behind but recoverable."</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"And what would make it green?"</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"Four more hours of Line 3 by end of tomorrow."</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"And if we run tonight, <strong>is the overtime slot open or closed?</strong>"</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"Open. You have approval for up to 6 hours this week."</span></div>
+            <div class="d-line"><span class="d-who">S1:</span><span class="d-says">"Right. Running tonight then."</span></div>
+          </div>
+          <div class="dialogue-diagnosis">
+            <p><strong>Diagnosis:</strong> S1 asked for a <code>SLOT</code> (yes/no). S3 answered with <code>SACK</code>s and <code>SCALE</code>s. The bridge: S1 <strong>asked for slots</strong> — green, red, open, closed — and got slots. Language operations can act on.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- S4 → S5 -->
+      <div class="dialogue-scene" id="ds4">
+        <div class="dialogue-scene-header" onclick="toggleScene('ds4')">
+          <h3>"Market is shifting to subscriptions." — "We don't do subscriptions."</h3>
+          <span class="scene-badge">S4 → S5</span>
+        </div>
+        <div class="scene-oneliner">Intelligence presents tensions. Identity responds with filters. Neither can hear the other.</div>
+        <div class="dialogue-body">
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label">The Mismatch</div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"The market is shifting to subscription models. There's huge tension — our competitors are all moving…"</span></div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"We don't do subscriptions."</span></div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"But the <strong>scale</strong> shows—"</span></div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"We. Don't. Do. Subscriptions."</span></div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says"><em>"You're not listening to the market data!"</em></span></div>
+          </div>
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label fix">The Bridge</div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"And when you say 'we don't do subscriptions' — <strong>what kind of 'don't' is that?</strong>"</span></div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"It's a filter. It doesn't pass through."</span></div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"And what is it about subscriptions that the filter blocks?"</span></div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"Ongoing obligation without ongoing relationship. We sell quality, not lock-in."</span></div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"And if there were a subscription model that <strong>was</strong> about ongoing relationship…?"</span></div>
+            <div class="d-line"><span class="d-who">S5:</span><span class="d-says">"That's… a different shape. That might fit through."</span></div>
+          </div>
+          <div class="dialogue-diagnosis">
+            <p><strong>Diagnosis:</strong> S4 presented a <code>SCALE</code> (tension). S5 responded with a <code>SIEVE</code> (filter) and a <code>SLOT</code> (who we are). The bridge used <strong>Clean Language</strong> to discover the real shape of the filter. It wasn't "no recurring revenue" — it was "no exploitative lock-in." The policy was narrower than the word.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- S3 → S4 -->
+      <div class="dialogue-scene" id="ds5">
+        <div class="dialogue-scene-header" onclick="toggleScene('ds5')">
+          <h3>"What's the exact market size for Germany?" — "It's complex…"</h3>
+          <span class="scene-badge">S3 → S4</span>
+        </div>
+        <div class="scene-oneliner">Control needs a number for the spreadsheet. Intelligence only has tensions.</div>
+        <div class="dialogue-body">
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label">The Mismatch</div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"What's the exact market size for our product in Germany?"</span></div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"Well, it's complex. The market is shifting. There's tension between traditional retail and D2C. Our competitor just pivoted…"</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"Just give me the <strong>number</strong>."</span></div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"It's not really a number. It's more of a probability distribution across scenarios…"</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says"><em>"This is useless. I need to fill in the budget spreadsheet."</em></span></div>
+          </div>
+          <div class="dialogue-exchange">
+            <div class="dialogue-exchange-label fix">The Bridge</div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"And when you look at Germany, <strong>what's the tension</strong> you see?"</span></div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"Traditional retail declining, D2C growing. We're strong in traditional, weak in D2C."</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"And what does that look like <strong>in terms of direction?</strong>"</span></div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"The scale is tipping. Maybe 60-40 toward D2C within 18 months."</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"And if we stay where we are, <strong>what happens to our share?</strong>"</span></div>
+            <div class="d-line"><span class="d-who">S4:</span><span class="d-says">"Shrinks. Probably from 15% to 10% of total market."</span></div>
+            <div class="d-line"><span class="d-who">S3:</span><span class="d-says">"<em>Now</em> I can build the budget scenarios."</span></div>
+          </div>
+          <div class="dialogue-diagnosis">
+            <p><strong>Diagnosis:</strong> S3 asked for a <code>SACK</code> (a number). S4 only produces <code>SCALE</code>s (tensions, comparisons). The bridge: S3 <strong>asked in S4's language</strong> — "what's the tension?" — then translated the scales back into sack-compatible numbers themselves.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="highlight" style="margin-top:1.5rem;">
+      <p>The pattern is always the same: <strong>ask in the shape the listener can answer, then translate back to your own.</strong> That's what ZQL federation does automatically. These conversations are the human version of the same translation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHETYPES -->
+<section class="arch-section" id="archetypes">
+  <div class="arch-inner">
+    <div class="section-label" style="color:var(--gold);">Five Archetypes</div>
+    <h2 class="section-heading section-heading--light">Which Organisation Are You?</h2>
+    <p class="section-sub" style="color:var(--text-on-dark);">Every dysfunctional organisation falls into one of five patterns. Each has a signature, a tell, and a prognosis. You'll recognise yours.</p>
+
+    <div class="arch-grid">
+      <div class="arch-card"><h3>The Blind</h3><div class="arch-sig">Can't see threats. Identity frozen in past success.</div><div class="arch-tell"><strong>Tell:</strong> Dismisses competitors publicly. Pride in not changing.</div><div class="arch-tell"><strong>Missing:</strong> Future scenarios, pivots, external advisors.</div><span class="arch-prognosis prognosis-terminal">TERMINAL</span></div>
+      <div class="arch-card"><h3>The Statesman</h3><div class="arch-sig">Great on the world stage. Ineffective at home.</div><div class="arch-tell"><strong>Tell:</strong> Earnings call: sophisticated. Glassdoor: "siloed," "politics."</div><div class="arch-tell"><strong>Missing:</strong> Internal coordination reforms. Ever.</div><span class="arch-prognosis prognosis-recoverable">RECOVERABLE</span></div>
+      <div class="arch-card"><h3>The Soviet</h3><div class="arch-sig">Centre sees all. Edge lies. Fear corrupts everything.</div><div class="arch-tell"><strong>Tell:</strong> Internal survey: 4.0. Glassdoor: 2.5. "Don't speak up."</div><div class="arch-tell"><strong>Missing:</strong> Any mention of dissent or challenge.</div><span class="arch-prognosis prognosis-recoverable">SLOW RECOVERY</span></div>
+      <div class="arch-card"><h3>The Darwinian</h3><div class="arch-sig">Units fend for themselves. No coordination layer.</div><div class="arch-tell"><strong>Tell:</strong> "Siloed" without "politics" — just absence.</div><div class="arch-tell"><strong>Missing:</strong> Cross-unit collaboration mentioned positively.</div><span class="arch-prognosis prognosis-moderate">MODERATE</span></div>
+      <div class="arch-card"><h3>The Viable</h3><div class="arch-sig">Sees threats AND can coordinate response.</div><div class="arch-tell"><strong>Tell:</strong> Consistent across crises. Glassdoor matches narrative.</div><div class="arch-tell"><strong>Missing:</strong> Nothing critical.</div><span class="arch-prognosis prognosis-maintain">MAINTAIN</span></div>
+    </div>
+
+    <div class="case-callout">
+      <div class="case-callout-label">Case Study — The Blind</div>
+      <blockquote>"The iPhone didn't really do it."<br>"Poster child for not doing anything but what we do."<br>"I don't look up… don't look down."</blockquote>
+      <div class="case-who">— Jim Balsillie, co-CEO of RIM (BlackBerry)</div>
+      <div class="case-outcome">Complete collapse within 5 years of interview.</div>
+    </div>
+
+    <div class="case-callout">
+      <div class="case-callout-label">Case Study — The Statesman</div>
+      <blockquote>"Go where the money is." Engages with market changes, plans multi-year scenarios.<br>But: "Could not be redeployed due to skill-location mismatch." 12,000 engineers eliminated — not because the skills didn't exist, but because there was no SOCKET between units.</blockquote>
+      <div class="case-who">— C. Vijayakumar, CEO of HCL Technologies</div>
+      <div class="case-outcome">Surviving — but recurring crises with the same pattern.</div>
+    </div>
+  </div>
+</section>
+
+<!-- KILLER QUESTION -->
+<section class="killer-section" id="killer">
+  <div class="killer-inner">
+    <div class="section-label">The Diagnostic</div>
+    <h2 class="section-heading">One Question That Separates Viable From Terminal</h2>
+    <div class="killer-q">What's the typical lag between when a problem becomes visible to someone in the organisation and when it reaches someone who can act on it?</div>
+    <div class="killer-responses">
+      <div class="killer-resp"><div class="killer-resp-lag healthy">Days</div><p><strong>Healthy.</strong> The game rewards surfacing.</p></div>
+      <div class="killer-resp"><div class="killer-resp-lag friction">Weeks</div><p><strong>Friction.</strong> Analysis paralysis before action.</p></div>
+      <div class="killer-resp"><div class="killer-resp-lag toxic">Quarters</div><p><strong>Toxic.</strong> Honesty is punished.</p></div>
+      <div class="killer-resp"><div class="killer-resp-lag broken">"We were surprised"</div><p><strong>Broken.</strong> Nobody can see.</p></div>
+    </div>
+    <p style="font-size:0.9rem; color:var(--text-muted); margin-top:1rem; line-height:1.7;">This bypasses what leadership <em>says</em> about culture and tests what actually <em>happens</em> to information. The answer reveals the DOSE.</p>
+  </div>
+</section>
+
+<!-- DIAGNOSTIC LEVELS -->
+<section class="diag-section" id="diagnostic">
+  <div class="diag-inner">
+    <div class="section-label">The Method</div>
+    <h2 class="section-heading">Diagnosis in Three Levels</h2>
+    <p class="section-sub">Using only public signals — earnings calls, Glassdoor, job boards, SEC filings — classify an organisation in under three hours.</p>
+
+    <div class="diag-level">
+      <div class="diag-level-label">Level 1 · 30 minutes</div>
+      <h4>External Sensing — Can They See?</h4>
+      <p>Read the earnings call Q&A. Three questions determine whether the organisation can sense and respond to external reality.</p>
+      <div class="diag-questions">
+        <div class="diag-q"><div class="diag-q-num">Q 1.1</div><p>Can assumptions be challenged?</p></div>
+        <div class="diag-q"><div class="diag-q-num">Q 1.2</div><p>How rigid is identity?</p></div>
+        <div class="diag-q"><div class="diag-q-num">Q 1.3</div><p>What's the time horizon?</p></div>
+      </div>
+      <div class="diag-outcomes">
+        <span class="diag-outcome blind">All fail → THE BLIND (stop)</span>
+        <span class="diag-outcome pass">All pass → Level 2</span>
+        <span class="diag-outcome mixed">Mixed → probe failures</span>
+      </div>
+    </div>
+
+    <div class="diag-level">
+      <div class="diag-level-label">Level 2 · 2–3 hours</div>
+      <h4>Internal Coordination — Can They Act?</h4>
+      <p>Cross-reference Glassdoor, job boards, and crisis language. Four questions reveal whether S2 functions or is absent, captured, or toxic.</p>
+      <div class="diag-questions">
+        <div class="diag-q"><div class="diag-q-num">Q 2.1</div><p>How was the last crisis resolved?</p></div>
+        <div class="diag-q"><div class="diag-q-num">Q 2.2</div><p>What happens to early warners?</p></div>
+        <div class="diag-q"><div class="diag-q-num">Q 2.3</div><p>How is capacity shared?</p></div>
+      </div>
+      <div class="diag-outcomes">
+        <span class="diag-outcome blind">Amputate + Trapped → STATESMAN</span>
+        <span class="diag-outcome blind">Punish + Commanded → SOVIET</span>
+        <span class="diag-outcome mixed">Hidden + Hoarded → DARWINIAN</span>
+        <span class="diag-outcome pass">Repair + Flowing → VIABLE</span>
+      </div>
+    </div>
+
+    <div class="diag-level">
+      <div class="diag-level-label">Level 3 · Confirmation</div>
+      <h4>Counter-Evidence — Are We Sure?</h4>
+      <p>Stress-test every classification. A suspected Statesman with disclosed S2 reforms may be viable in transition. Monitor the next crisis.</p>
+      <div class="diag-outcomes">
+        <span class="diag-outcome pass">Counter-evidence → reclassify</span>
+        <span class="diag-outcome blind">No counter-evidence → confirmed</span>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem;">
+      <div class="section-label">Quick Reference</div>
+      <h3 style="font-family:var(--serif); font-size:1.3rem; margin-bottom:1rem; color:var(--text-dark);">The Three Tells</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tell</th><th>What to Listen For</th><th>Diagnosis</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Response to Threat</strong></td><td>Dismisses → Engages without internal mechanism → Engages AND shows response</td><td>Blind → Statesman → Viable</td></tr>
+            <tr><td><strong>Crisis Language</strong></td><td>"eliminated / restructured" → "found responsible" → "changed incentives / learned"</td><td>Statesman → Soviet → Viable</td></tr>
+            <tr><td><strong>The Missing Topic</strong></td><td>No coordination reforms → No dissent → No cross-unit collab → No scenarios</td><td>Statesman → Soviet → Darwinian → Blind</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THEORY -->
+<section class="theory-section" id="theory">
+  <div class="theory-inner">
+    <div class="section-label">The Theory</div>
+    <h2 class="section-heading">Why This Works</h2>
+    <p class="section-sub">You've seen the pathologies and the conversations that fail. Here's the structural model that explains them — and makes diagnosis systematic rather than anecdotal.</p>
+
+    <div class="one-liner" style="margin-top:0;">
+      <p>We're not building software. We're building a <strong>treaty framework</strong>. Shape defines assets. World defines state. Context defines which game. Dose defines the rules that make cooperation rational.</p>
+    </div>
+
+    <div class="dim-grid">
+      <div class="dim-card"><div class="dim-card-icon">🔷</div><h3>SHAPE</h3><p>What geometry of answer? Assets on the board.</p></div>
+      <div class="dim-card"><div class="dim-card-icon">🌍</div><h3>WORLD</h3><p>What epistemic status? State of play.</p></div>
+      <div class="dim-card"><div class="dim-card-icon">📐</div><h3>CONTEXT</h3><p>What type-specific rules? Which game?</p></div>
+      <div class="dim-card"><div class="dim-card-icon">💊</div><h3>DOSE</h3><p>Therapeutic or toxic? Rules of engagement.</p></div>
+    </div>
+
+    <!-- SHAPES -->
+    <div class="expandable" id="exp-shapes">
+      <div class="expandable-header" onclick="toggleExpand('exp-shapes')"><h3>The Six Shapes (Article 1 of the Treaty)</h3><span class="expandable-toggle">▼</span></div>
+      <div class="expandable-content"><div class="expandable-inner">
+        <p>Every piece of information fits one of six geometric shapes. The shape determines who can hear it.</p>
+        <div class="shapes-grid">
+          <div class="shape-card"><h4>SLOT</h4><p>Single value. One occupant only.</p><code>Status: Green</code></div>
+          <div class="shape-card"><h4>STACK</h4><p>Ordered list. Sequences and history.</p><code>Event 1 → Event 2 → Event 3</code></div>
+          <div class="shape-card"><h4>SACK</h4><p>Unordered bag. Total weight matters.</p><code>{All orders for customer}</code></div>
+          <div class="shape-card"><h4>SCALE</h4><p>Balance beam. Returns angle of tension.</p><code>78% utilisation</code></div>
+          <div class="shape-card"><h4>SIEVE</h4><p>Filter. Blocks or passes by criteria.</p><code>Late orders only</code></div>
+          <div class="shape-card"><h4>SOCKET</h4><p>Shaped interface. Connects if shapes match.</p><code>→ Transfer workflow</code></div>
+        </div>
+        <p style="margin-top:1rem;">Each VSM layer speaks native shapes. S1 speaks <strong>STACKs + SLOTs</strong>. S3 speaks <strong>SACKs + SCALEs</strong>. S5 speaks <strong>SIEVEs + SLOTs</strong>. When shapes mismatch, communication fails — not because anyone is wrong, but because they're speaking different geometries.</p>
+        <div class="highlight"><p>The shape is universal. SAP returns SLOTs and STACKs. DHL returns SLOTs and STACKs. The interpretation is local. That's why federation works.</p></div>
+      </div></div>
+    </div>
+
+    <!-- WORLDS -->
+    <div class="expandable" id="exp-worlds">
+      <div class="expandable-header" onclick="toggleExpand('exp-worlds')"><h3>The Three Worlds (Article 2)</h3><span class="expandable-toggle">▼</span></div>
+      <div class="expandable-content"><div class="expandable-inner">
+        <div class="worlds-grid">
+          <div class="world-card"><h4>ACTUAL</h4><p>What is observed. Current inventory. Real utilisation.</p></div>
+          <div class="world-card"><h4>EXPECTED</h4><p>What is planned. Budget. Forecast. Commitment.</p></div>
+          <div class="world-card"><h4>HYPOTHETICAL</h4><p>What might be. Scenarios. Contingencies.</p></div>
+        </div>
+        <p style="margin-top:1.2rem;">The gap between ACTUAL and EXPECTED is not a bug — it's the signal that drives all adaptation. How organisations respond to that gap determines everything.</p>
+      </div></div>
+    </div>
+
+    <!-- DOSE -->
+    <div class="expandable" id="exp-dose">
+      <div class="expandable-header" onclick="toggleExpand('exp-dose')"><h3>DOSE: The Missing Dimension (Article 4)</h3><span class="expandable-toggle">▼</span></div>
+      <div class="expandable-content"><div class="expandable-inner">
+        <p>DOSE answers: who sees what, who sets expectations, and what happens when reality diverges? It's the coefficient that determines stable vs explosive.</p>
+        <div class="spectrum">
+          <div class="spectrum-bar">
+            <div class="spectrum-segment"><div class="spectrum-label">Fragmented</div><h4>Exploit the Gap</h4><p>Every actor for themselves. Bullwhip.</p></div>
+            <div class="spectrum-segment"><div class="spectrum-label">Federated</div><h4>Surface the Gap</h4><p>Shared visibility. Homeostasis.</p></div>
+            <div class="spectrum-segment"><div class="spectrum-label">Centralised</div><h4>Repress the Gap</h4><p>Centre sees all. Edge lies. Collapse.</p></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Variable</th><th>Soviet</th><th>Market</th><th>Cybernetic</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Who sees</strong></td><td>Centre sees all</td><td>Nobody</td><td>Symmetric by role</td></tr>
+              <tr><td><strong>Who sets EXPECTED</strong></td><td>Central planner</td><td>Nobody (implicit)</td><td>Collaborative</td></tr>
+              <tr><td><strong>Response to gaps</strong></td><td>PUNISH</td><td>EXPLOIT</td><td>SURFACE</td></tr>
+              <tr><td><strong>Symmetry</strong></td><td>Asymmetric (top-down)</td><td>Asymmetric (hidden)</td><td>Symmetric</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- POLYNOMIAL -->
+    <div class="expandable" id="exp-poly">
+      <div class="expandable-header" onclick="toggleExpand('exp-poly')"><h3>The Three Query Levels (Q¹ Q² Q³)</h3><span class="expandable-toggle">▼</span></div>
+      <div class="expandable-content"><div class="expandable-inner">
+        <div class="poly-grid">
+          <div class="poly-card"><h4>Q¹ — Linear</h4><div class="formula">f(SHAPE, WORLD)</div><p><strong>"Do we have 50 units?"</strong><br>SACK(ACTUAL) > 50? → True/False.<br>Any dashboard. Commodity.</p></div>
+          <div class="poly-card"><h4>Q² — Quadratic</h4><div class="formula">f(SHAPE, WORLD) × CONTEXT</div><p><strong>"Can I have 50 units?"</strong><br>IF (Customer == Nuclear) AND (Stock > Safety) THEN True.<br>Domain knowledge. Consultative.</p></div>
+          <div class="poly-card"><h4>Q³ — Cubic</h4><div class="formula">(f(SHAPE, WORLD) × CONTEXT) ^ DOSE</div><p><strong>"Should I <em>admit</em> I have 50?"</strong><br>IF (Sharing == Symmetric) THEN Show_Actual ELSE Show_Buffer.<br>Game theory. Strategic.</p></div>
+        </div>
+        <div class="highlight"><p>Most systems operate at Q¹ when decisions require Q³. Better dashboards amplify dysfunction by giving precise data to actors playing misaligned games.</p></div>
+      </div></div>
+    </div>
+
+    <!-- GAME THEORY -->
+    <div class="expandable" id="exp-game">
+      <div class="expandable-header" onclick="toggleExpand('exp-game')"><h3>The Game Theory Foundation</h3><span class="expandable-toggle">▼</span></div>
+      <div class="expandable-content"><div class="expandable-inner">
+        <p>In standard operations, parties are locked in a Prisoner's Dilemma. Symmetric DOSE changes the payoff matrix.</p>
+        <div class="matrix-container">
+          <div class="matrix">
+            <h4>Default Game</h4>
+            <div class="matrix-grid">
+              <div class="matrix-cell header"></div><div class="matrix-cell header">B: Share</div><div class="matrix-cell header">B: Hide</div>
+              <div class="matrix-cell header">A: Share</div><div class="matrix-cell">OPTIMAL<br><span style="font-size:0.65rem;color:var(--text-muted);">(risky)</span></div><div class="matrix-cell">SUCKER<br><span style="font-size:0.65rem;color:var(--text-muted);">(exploited)</span></div>
+              <div class="matrix-cell header">A: Hide</div><div class="matrix-cell">SUCKER<br><span style="font-size:0.65rem;color:var(--text-muted);">(exploited)</span></div><div class="matrix-cell stuck">NASH EQ.<br><span style="font-size:0.65rem;">← stuck</span></div>
+            </div>
+            <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.5rem;text-align:center;">Both hide. Both hold safety stock.<br>Safety stock = physical expensive mistrust.</p>
+          </div>
+          <div class="matrix">
+            <h4>With Symmetric DOSE</h4>
+            <div class="matrix-grid">
+              <div class="matrix-cell header"></div><div class="matrix-cell header">B: Share</div><div class="matrix-cell header">B: Hide</div>
+              <div class="matrix-cell header">A: Share</div><div class="matrix-cell optimal">COOPERATIVE<br>SURPLUS<br><span style="font-size:0.65rem;">← only way</span></div><div class="matrix-cell impossible">IMPOSSIBLE<br><span style="font-size:0.65rem;">(DOSE prevents)</span></div>
+              <div class="matrix-cell header">A: Hide</div><div class="matrix-cell impossible">IMPOSSIBLE<br><span style="font-size:0.65rem;">(DOSE prevents)</span></div><div class="matrix-cell stuck">DEADLOCK<br><span style="font-size:0.65rem;">(both lose)</span></div>
+            </div>
+            <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.5rem;text-align:center;">Sucker's payoff eliminated.<br>Cooperation: only rational move.</p>
+          </div>
+        </div>
+        <p style="margin-top:1rem;">Every relationship is a different game. The DOSE must match:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Relationship</th><th>Game</th><th>Appropriate Dose</th></tr></thead>
+            <tbody>
+              <tr><td>Walmart vs. P&G</td><td>Dictator</td><td>Forced transparency</td></tr>
+              <tr><td>Apple vs. Foxconn</td><td>Repeated PD</td><td>Guarded, builds over time</td></tr>
+              <tr><td>Swagelok vs. Distributor</td><td>Stag Hunt (partners)</td><td>Symmetric visibility</td></tr>
+              <tr><td>Competitors via marketplace</td><td>Poker (zero-sum)</td><td>Opaque (minimal)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- VSM -->
+    <div class="expandable" id="exp-vsm">
+      <div class="expandable-header" onclick="toggleExpand('exp-vsm')"><h3>Viable System Model Mapping</h3><span class="expandable-toggle">▼</span></div>
+      <div class="expandable-content"><div class="expandable-inner">
+        <p>Stafford Beer's VSM is the architecture of survival. ZQL is the language that makes it work across parties.</p>
+        <div class="vsm-table">
+          <div class="vsm-row" style="background:var(--cream);font-weight:600;"><div class="vsm-system">System</div><div>Function</div><div>ZQL Component</div><div>Native Shapes</div></div>
+          <div class="vsm-row"><div class="vsm-system">S1</div><div>Operations — doing the work</div><div>ACTUAL (observations)</div><div>STACK + SLOT</div></div>
+          <div class="vsm-row"><div class="vsm-system">S2</div><div>Coordination — damping oscillation</div><div>SIEVE + Symmetric DOSE</div><div>STACK + SIEVE</div></div>
+          <div class="vsm-row"><div class="vsm-system">S3</div><div>Control — resource bargaining</div><div>SCALE + SACK</div><div>SACK + SCALE</div></div>
+          <div class="vsm-row"><div class="vsm-system">S3*</div><div>Audit — verification</div><div>ACTUAL vs CLAIMED</div><div>STACK + SIEVE</div></div>
+          <div class="vsm-row"><div class="vsm-system">S4</div><div>Intelligence — scanning the future</div><div>HYPOTHETICAL + CONTEXT</div><div>SCALE + SOCKET</div></div>
+          <div class="vsm-row"><div class="vsm-system">S5</div><div>Policy — who are we?</div><div>DOSE (the treaty)</div><div>SIEVE + SLOT</div></div>
+        </div>
+        <p style="margin-top:1rem;">Most organisations have strong S1 and S3 (operations and managers yelling). They lack <strong>S2</strong> (real-time damping), <strong>S4</strong> (hypothetical modelling), and healthy <strong>S5</strong> (identity that enables rather than represses).</p>
+      </div></div>
+    </div>
+
+    <!-- TREATY -->
+    <div class="expandable" id="exp-treaty">
+      <div class="expandable-header" onclick="toggleExpand('exp-treaty')"><h3>The Treaty Framework</h3><span class="expandable-toggle">▼</span></div>
+      <div class="expandable-content"><div class="expandable-inner">
+        <p>When parties adopt ZQL, they're not installing software. They're signing a treaty.</p>
+        <pre><code>TREATY STRUCTURE
+
+Article 1: SHAPES (Assets on the Board)
+├─ We agree on the geometry of claims
+├─ STACK, SLOT, SACK, SCALE, SIEVE, SOCKET
+└─ No ambiguity about what we're discussing
+
+Article 2: WORLDS (State of Play)
+├─ ACTUAL: Observable facts
+├─ EXPECTED: Commitments and plans
+├─ HYPOTHETICAL: Scenarios and options
+└─ We agree on epistemic status of claims
+
+Article 3: CONTEXT (Which Game)
+├─ Entity types determine rules
+├─ Customer types determine response
+└─ We agree on what rules apply where
+
+Article 4: DOSE (Rules of Engagement)
+├─ Symmetric visibility requirements
+├─ Who sees what, who sets EXPECTED
+├─ How we respond to gaps
+└─ We agree to SURFACE, not PUNISH or EXPLOIT</code></pre>
+        <p style="margin-top:1rem;">The onboarding isn't technical — it's constitutional: <em>"We reject the Soviet Lie (hiding bad news) and the Market Casino (hiding good news). We agree to surface the Gap."</em></p>
+      </div></div>
+    </div>
+
+    <!-- ASHBY -->
+    <div class="expandable" id="exp-ashby">
+      <div class="expandable-header" onclick="toggleExpand('exp-ashby')"><h3>Ashby's Law: The Foundation</h3><span class="expandable-toggle">▼</span></div>
+      <div class="expandable-content"><div class="expandable-inner">
+        <div class="one-liner" style="margin-top:0;"><p>"Only variety can absorb variety."</p></div>
+        <p>You cannot eliminate surprise. You can only pretend it doesn't exist (collapse), let it run wild (chaos), or surface it and manage it (viable). ZQL surfaces variety at the exact rate the system can absorb it. That's not efficiency. That's viability.</p>
+      </div></div>
+    </div>
+
+    <div class="one-liner" style="margin-top:2rem;">
+      <p>Chaos is variety you refused to manage. Collapse is variety you tried to hide. <strong>ZQL surfaces variety at the rate the system can absorb it.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- THE CURE -->
+<section id="cure" style="background:var(--offwhite); padding:5rem 2rem;">
+  <div style="max-width:920px; margin:0 auto;">
+    <div class="section-label">The Cure</div>
+    <h2 class="section-heading">So What Do You Actually Do About It?</h2>
+    <p class="section-sub">You've seen the conversations that fail, the archetypes that emerge, and the theory that explains them. Here's the good news: federation fixes this — without anyone giving up control.</p>
+
+    <!-- The three guarantees -->
+    <div class="cure-grid-3" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1.2rem; margin:2.5rem 0;">
+
+      <div style="background:#fff; border-radius:6px; padding:1.6rem; border-top:3px solid var(--green-yes);">
+        <div style="font-family:var(--mono); font-size:0.68rem; color:var(--green-yes); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem;">Guarantee 1</div>
+        <h3 style="font-family:var(--serif); font-size:1.05rem; color:var(--text-dark); margin-bottom:0.5rem;">Data Never Leaves Home</h3>
+        <p style="font-size:0.85rem; color:var(--text-body); line-height:1.6; margin-bottom:0.8rem;">ZQL is read-only. It queries systems where they sit. No data lake. No replication. No ETL pipeline. No political battle over who "owns" the data — because nobody moves it.</p>
+        <div style="font-family:var(--mono); font-size:0.72rem; color:var(--text-muted);">Zero sovereignty risk.</div>
+      </div>
+
+      <div style="background:#fff; border-radius:6px; padding:1.6rem; border-top:3px solid var(--green-yes);">
+        <div style="font-family:var(--mono); font-size:0.68rem; color:var(--green-yes); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem;">Guarantee 2</div>
+        <h3 style="font-family:var(--serif); font-size:1.05rem; color:var(--text-dark); margin-bottom:0.5rem;">Every Answer Has Provenance</h3>
+        <p style="font-size:0.85rem; color:var(--text-body); line-height:1.6; margin-bottom:0.8rem;">No hallucinations. No probabilistic guessing. Every answer traces back to the source system, the query that produced it, and the vocabulary that defined it. Auditors can follow the chain.</p>
+        <div style="font-family:var(--mono); font-size:0.72rem; color:var(--text-muted);">Full traceability. No AI liability.</div>
+      </div>
+
+      <div style="background:#fff; border-radius:6px; padding:1.6rem; border-top:3px solid var(--green-yes);">
+        <div style="font-family:var(--mono); font-size:0.68rem; color:var(--green-yes); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem;">Guarantee 3</div>
+        <h3 style="font-family:var(--serif); font-size:1.05rem; color:var(--text-dark); margin-bottom:0.5rem;">Weeks, Not Years</h3>
+        <p style="font-size:0.85rem; color:var(--text-body); line-height:1.6; margin-bottom:0.8rem;">No rip-and-replace. No data migration project. ZQL federates across the systems you already have. First value in weeks because we're not rebuilding — we're translating.</p>
+        <div style="font-family:var(--mono); font-size:0.72rem; color:var(--text-muted);">Existing systems. New coherence.</div>
+      </div>
+
+    </div>
+
+    <!-- Why not AI -->
+    <div class="one-liner">
+      <p>No AI. No data lakes. Just the truth — traceable, auditable, and owned by the people who created it.</p>
+    </div>
+
+    <div style="background:#fff; border-radius:6px; padding:1.8rem 2rem; margin:2rem 0; border-left:3px solid var(--gold);">
+      <h3 style="font-family:var(--serif); font-size:1.1rem; color:var(--text-dark); margin-bottom:0.8rem;">Why Not Just Use AI?</h3>
+      <p style="font-size:0.88rem; color:var(--text-body); line-height:1.7; margin-bottom:0.8rem;">An AI answering "do we have 50 units?" gives you a Q¹ answer — a plausible-sounding fact with no provenance. Under the EU AI Act, that answer creates liability. Under DORA, it fails audit. Under real operational pressure, it hallucinates exactly when you can least afford it.</p>
+      <p style="font-size:0.88rem; color:var(--text-body); line-height:1.7; margin-bottom:0.8rem;">ZQL answers the same question at Q³ — with context (which customer, which compliance regime, which priority) and dose (who should see this, who set the expectation, what happens when there's a gap). The answer isn't probabilistic. It's <strong>traceable to source</strong>.</p>
+      <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7;">The difference isn't technical sophistication. It's whether you can stand behind the answer when the auditor arrives.</p>
+    </div>
+
+    <!-- Sector proof -->
+    <div style="margin-top:2.5rem;">
+      <div class="section-label">Where It's Working</div>
+      <h3 style="font-family:var(--serif); font-size:1.3rem; color:var(--text-dark); margin-bottom:1.2rem;">Verified Across Sectors</h3>
+
+      <div class="cure-grid-3" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem;">
+
+        <div style="background:var(--navy); border-radius:6px; padding:1.5rem; border-bottom:3px solid var(--gold);">
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.4rem;">Supply Chain</div>
+          <h4 style="font-family:var(--serif); color:#fff; font-size:1rem; margin-bottom:0.5rem;">The "Where's My Stuff?" Problem</h4>
+          <p style="font-size:0.8rem; color:var(--text-on-dark); line-height:1.6; margin-bottom:0.6rem;">Swagelok's distributed network: 200+ points of sale, multiple carriers, handover darkness between systems. Each carrier tracks brilliantly — but "delivered" means four different things in four different systems.</p>
+          <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5;"><strong>Pathology:</strong> Darwinian. Units fend for themselves. Sandra reconciles by phone, 15 minutes per call.</p>
+          <p style="font-size:0.78rem; color:var(--gold-soft); line-height:1.5;"><strong>Cure:</strong> Federate the disagreements. Don't merge the systems — make the differences visible. 15 minutes becomes 30 seconds.</p>
+        </div>
+
+        <div style="background:var(--navy); border-radius:6px; padding:1.5rem; border-bottom:3px solid var(--gold);">
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.4rem;">Healthcare</div>
+          <h4 style="font-family:var(--serif); color:#fff; font-size:1rem; margin-bottom:0.5rem;">NHS Trust Federation</h4>
+          <p style="font-size:0.8rem; color:var(--text-on-dark); line-height:1.6; margin-bottom:0.6rem;">42 Integrated Care Boards. Each trust defines "bed available" differently — clinically ready, discharge-pending, cleaned, staffed. A bed in Lewisham is not the same shape as a bed in Leeds.</p>
+          <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5;"><strong>Pathology:</strong> Statesman. Sophisticated strategy nationally, coordination absent locally.</p>
+          <p style="font-size:0.78rem; color:var(--gold-soft); line-height:1.5;"><strong>Cure:</strong> Preserve local definitions. Surface the variance as signal. "Why does Trust A discharge 2× faster?" becomes a learnable question.</p>
+        </div>
+
+        <div style="background:var(--navy); border-radius:6px; padding:1.5rem; border-bottom:3px solid var(--gold);">
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.4rem;">Financial Services</div>
+          <h4 style="font-family:var(--serif); color:#fff; font-size:1rem; margin-bottom:0.5rem;">DORA Compliance</h4>
+          <p style="font-size:0.8rem; color:var(--text-on-dark); line-height:1.6; margin-bottom:0.6rem;">50,000 EU financial entities must demonstrate ICT risk oversight, third-party dependency mapping, and operational resilience — across systems that were never designed to talk to each other.</p>
+          <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5;"><strong>Pathology:</strong> Soviet. Centre demands the Register of Information. Edge fills it in to survive the audit, not to tell the truth.</p>
+          <p style="font-size:0.78rem; color:var(--gold-soft); line-height:1.5;"><strong>Cure:</strong> Federate the Register from live systems. The RoI becomes a Q³ instrument — traceable, auditable, and impossible to game.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sovereign Implementation summary -->
+    <div style="margin-top:2.5rem;">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:28%;">Constraint</th><th>The ZQL Treaty Requirement</th><th style="width:25%;">What It Eliminates</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Read-only federation</strong></td><td>Data queried where it sits. No replication, no movement, no lake.</td><td>Political battles over data ownership</td></tr>
+            <tr><td><strong>Cryptographic provenance</strong></td><td>Every answer traceable to source system, query, and vocabulary version.</td><td>Hallucinations, audit gaps, AI liability</td></tr>
+            <tr><td><strong>Local vocabulary</strong></td><td>Each system keeps its own definitions. Variance is signal, not noise.</td><td>Forced harmonisation projects</td></tr>
+            <tr><td><strong>Symmetric visibility</strong></td><td>All parties see the gap. No asymmetric advantage.</td><td>The Sucker's Payoff (and the lying it causes)</td></tr>
+            <tr><td><strong>Existing infrastructure</strong></td><td>Federates across systems already deployed. No rip-and-replace.</td><td>Multi-year transformation programmes</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-inner reveal">
+    <h2 class="cta-heading">Name the pathology. Then fix the game.</h2>
+    <p class="cta-sub">We'll run this framework against your organisation — or your acquisition target, your supplier, your competitor — using only public signals. No access required.</p>
+    <a href="https://calendly.com/zql" class="cta-button" target="_blank" rel="noopener">
+      <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Book a Call
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-entity">ZQL LLC (Switzerland) · atozql.com</div>
+  <div class="footer-note">The home of federation, neutrality, and data sovereignty.</div>
+</footer>
+
+<script>
+function toggleExpand(id) { document.getElementById(id).classList.toggle('open'); }
+function toggleScene(id) { document.getElementById(id).classList.toggle('open'); }
+
+const nav = document.getElementById('mainNav');
+const sectionNav = document.getElementById('sectionNav');
+const sectionLinks = document.querySelectorAll('.section-nav-link');
+const sectionIds = ['dialogues','archetypes','killer','diagnostic','theory','cure'];
+
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+  if (sectionNav) sectionNav.classList.toggle('shadowed', window.scrollY > 300);
+
+  // Scroll-spy: find which section is in view
+  let current = sectionIds[0];
+  for (const id of sectionIds) {
+    const el = document.getElementById(id);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      // Section is "active" when its top is within 140px of viewport top
+      if (rect.top <= 140) current = id;
+    }
+  }
+  sectionLinks.forEach(link => {
+    link.classList.toggle('active', link.dataset.section === current);
+  });
+});
+
+// Smooth scroll for section nav links (offset for sticky headers)
+sectionLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.getElementById(link.dataset.section);
+    if (target) {
+      const offset = 60 + 44; // main nav + section nav height
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+const reveals = document.querySelectorAll('.reveal');
+new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.12 }).observe(document.querySelector('.reveal'));
+</script>
+
+</body>
+</html>
