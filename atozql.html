@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZQL — Federation for the Front Line</title>
+<meta name="description" content="Simple questions deserve answers. ZQL federates your systems so frontline workers get the truth in seconds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #1B2541;
+  --navy-deep: #131C33;
+  --navy-light: #243154;
+  --gold: #C9A84C;
+  --gold-soft: #D4BA6A;
+  --gold-dim: rgba(201, 168, 76, 0.15);
+  --cream: #F5F0E8;
+  --cream-warm: #FAF7F2;
+  --offwhite: #FDFCFA;
+  --text-dark: #1B2541;
+  --text-body: #3A3F4B;
+  --text-muted: #6B7085;
+  --text-light: #B0B5C3;
+  --text-on-dark: #E8E5DF;
+  --green-yes: #2D6A4F;
+  --red-no: #8B3A3A;
+  --serif: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--sans);
+  color: var(--text-body);
+  background: var(--offwhite);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---- NAV ---- */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 2rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(27, 37, 65, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+  transition: all 0.3s ease;
+}
+nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.25); }
+
+.nav-mark {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  color: #fff;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+.nav-mark span { color: var(--gold); }
+
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: #fff; }
+.nav-cta {
+  background: var(--gold) !important;
+  color: var(--navy) !important;
+  padding: 0.45rem 1.1rem;
+  border-radius: 4px;
+  font-weight: 600 !important;
+  transition: all 0.2s !important;
+}
+.nav-cta:hover { background: var(--gold-soft) !important; transform: translateY(-1px); }
+
+.nav-mobile { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+.nav-mobile svg { width: 24px; height: 24px; color: #fff; }
+
+/* ---- HERO ---- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: var(--navy-deep);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gold);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -15%;
+  width: 60%;
+  height: 160%;
+  background: radial-gradient(ellipse at center, rgba(201,168,76,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 900px;
+  padding: 8rem 2rem 6rem;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  color: #fff;
+  line-height: 0.95;
+  margin-bottom: 0.3em;
+  letter-spacing: -0.01em;
+}
+
+.hero-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+  color: var(--gold);
+  margin-bottom: 2.5rem;
+  line-height: 1.3;
+}
+
+.hero-manifesto {
+  max-width: 620px;
+}
+.hero-manifesto p {
+  color: var(--text-on-dark);
+  font-size: 1.08rem;
+  line-height: 1.7;
+  margin-bottom: 0.6em;
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+}
+.hero-manifesto p:nth-child(1) { animation-delay: 0.4s; }
+.hero-manifesto p:nth-child(2) { animation-delay: 0.6s; opacity: 0.75; }
+.hero-manifesto p:nth-child(3) { animation-delay: 0.8s; font-weight: 500; color: #fff; }
+
+.hero-entity {
+  margin-top: 3rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+  animation-delay: 1.1s;
+}
+.hero-entity em { font-style: italic; color: var(--text-light); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- SECTION UTILITIES ---- */
+section { padding: 6rem 2rem; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.section-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.8rem;
+}
+.section-heading {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: var(--text-dark);
+  margin-bottom: 0.6em;
+  line-height: 1.15;
+}
+.section-heading--light { color: #fff; }
+.section-sub {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+.section-sub--light { color: var(--text-light); }
+
+/* ---- IMPOSSIBLE QUESTIONS ---- */
+.questions-section { background: var(--cream); }
+
+.questions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.q-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 2rem 2rem 1.8rem;
+  border-left: 4px solid var(--gold);
+  transition: all 0.25s ease;
+  cursor: default;
+}
+.q-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(27,37,65,0.08); }
+
+.q-card-icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.7rem;
+  display: block;
+}
+.q-card-question {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.35rem;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
+}
+.q-card-sector {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.questions-footer {
+  margin-top: 2.5rem;
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  max-width: 700px;
+  line-height: 1.7;
+}
+
+/* ---- INSIGHT ---- */
+.insight-section { background: var(--offwhite); }
+
+.insight-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-top: 2.5rem;
+}
+
+.insight-col h3 {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+}
+.insight-col p {
+  color: var(--text-body);
+  line-height: 1.75;
+  font-size: 0.95rem;
+}
+.insight-col--orthodox { border-right: 1px solid rgba(27,37,65,0.08); padding-right: 4rem; }
+.insight-col--insight h3 { color: var(--gold); }
+
+/* ---- FEDERATION ---- */
+.federation-section { background: var(--cream-warm); }
+
+.fed-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.fed-pillar {
+  background: #fff;
+  border-radius: 6px;
+  padding: 2.2rem 1.8rem;
+  border-top: 3px solid var(--gold);
+}
+.fed-pillar-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--gold-dim);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.fed-pillar h3 {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  margin-bottom: 0.8rem;
+}
+.fed-pillar p {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.fed-motto {
+  margin-top: 2.5rem;
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  padding: 1.5rem;
+  border-top: 1px solid rgba(27,37,65,0.06);
+  border-bottom: 1px solid rgba(27,37,65,0.06);
+}
+
+/* ---- HOW IT WORKS ---- */
+.how-section { background: var(--navy); }
+
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 3rem;
+  position: relative;
+}
+.how-steps::before {
+  content: '';
+  position: absolute;
+  top: 32px;
+  left: 8%;
+  right: 8%;
+  height: 2px;
+  background: var(--navy-light);
+}
+
+.how-step {
+  text-align: center;
+  position: relative;
+  padding: 0 1rem;
+}
+.how-step-num {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.2rem;
+  position: relative;
+  z-index: 2;
+}
+.how-step h3 {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: #fff;
+  margin-bottom: 0.7rem;
+}
+.how-step p {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  line-height: 1.65;
+}
+
+.how-example {
+  margin-top: 3.5rem;
+  background: var(--navy-light);
+  border-radius: 6px;
+  padding: 2rem 2.5rem;
+  border-left: 3px solid var(--gold);
+}
+.how-example-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.8rem;
+}
+.how-example p {
+  color: var(--text-on-dark);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+.how-example strong { color: #fff; }
+
+/* ---- PORTFOLIO ---- */
+.portfolio-section { background: var(--offwhite); }
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.portfolio-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 2rem 2rem 1.8rem;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(27,37,65,0.06);
+  position: relative;
+  overflow: hidden;
+}
+.portfolio-card::after {
+  content: '→';
+  position: absolute;
+  top: 1.8rem;
+  right: 1.8rem;
+  font-size: 1.1rem;
+  color: var(--gold);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.25s ease;
+}
+.portfolio-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(27,37,65,0.1);
+  border-color: var(--gold);
+}
+.portfolio-card:hover::after { opacity: 1; transform: translateX(0); }
+
+.portfolio-card-sector {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.portfolio-card-sector span { font-size: 1rem; }
+.portfolio-card-question {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--text-dark);
+  margin-bottom: 0.8rem;
+  line-height: 1.25;
+  padding-right: 2rem;
+}
+.portfolio-card-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+.portfolio-card-systems {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.portfolio-card-systems span {
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  background: var(--cream);
+  color: var(--text-muted);
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+}
+
+/* ---- COMPARISON ---- */
+.compare-section { background: var(--cream); }
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.compare-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.compare-them {
+  background: var(--navy);
+  padding: 1.8rem 2rem;
+}
+.compare-us {
+  background: var(--navy-deep);
+  padding: 1.8rem 2rem;
+  border-left: 3px solid var(--gold);
+}
+.compare-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.compare-them .compare-label { color: var(--red-no); }
+.compare-us .compare-label { color: var(--gold); }
+.compare-them h4 { color: rgba(255,255,255,0.6); font-size: 1rem; margin-bottom: 0.5rem; font-family: var(--serif); }
+.compare-us h4 { color: #fff; font-size: 1rem; margin-bottom: 0.5rem; font-family: var(--serif); }
+.compare-them p { color: rgba(255,255,255,0.4); font-size: 0.85rem; line-height: 1.65; }
+.compare-us p { color: var(--text-on-dark); font-size: 0.85rem; line-height: 1.65; }
+
+/* ---- CTA ---- */
+.cta-section {
+  background: var(--navy-deep);
+  text-align: center;
+  padding: 6rem 2rem;
+  position: relative;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gold);
+}
+
+.cta-heading {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: #fff;
+  margin-bottom: 0.4em;
+  line-height: 1.15;
+}
+.cta-sub {
+  font-size: 1.05rem;
+  color: var(--text-light);
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--gold);
+  color: var(--navy);
+  padding: 0.9rem 2.2rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  transition: all 0.25s ease;
+}
+.cta-button:hover { background: var(--gold-soft); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.25); }
+.cta-button svg { width: 18px; height: 18px; }
+
+/* ---- FOOTER ---- */
+footer {
+  background: var(--navy);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+.footer-entity {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+.footer-note {
+  color: rgba(255,255,255,0.25);
+  font-size: 0.72rem;
+  font-style: italic;
+}
+
+/* ---- SCROLL ANIMATIONS ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--navy-deep);
+    padding: 1.5rem 2rem;
+    gap: 1.2rem;
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+  }
+  .nav-mobile { display: block; }
+  .questions-grid,
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .insight-columns { grid-template-columns: 1fr; gap: 2.5rem; }
+  .insight-col--orthodox { border-right: none; padding-right: 0; border-bottom: 1px solid rgba(27,37,65,0.08); padding-bottom: 2.5rem; }
+  .fed-pillars { grid-template-columns: 1fr; }
+  .how-steps { grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+  .how-steps::before { display: none; }
+  .compare-row { grid-template-columns: 1fr; }
+  .compare-us { border-left: none; border-top: 3px solid var(--gold); }
+  .hero-inner { padding: 7rem 1.5rem 4rem; }
+  section { padding: 4.5rem 1.5rem; }
+}
+
+@media (max-width: 540px) {
+  .how-steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-mark">Z<span>Q</span>L</a>
+  <div class="nav-links" id="navLinks">
+    <a href="#questions">The Questions</a>
+    <a href="#how">How It Works</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#compare">Why ZQL</a>
+    <a href="#cta" class="nav-cta">Book a Call</a>
+  </div>
+  <button class="nav-mobile" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1>ZQL</h1>
+    <div class="hero-tagline">Federation for the Front Line</div>
+    <div class="hero-manifesto">
+      <p>Simple questions deserve answers.</p>
+      <p>The systems holding those answers don't know each other.</p>
+      <p>We make them know each other.</p>
+    </div>
+    <div class="hero-entity">
+      ZQL LLC (Switzerland) &nbsp;·&nbsp; <em>Incorporated in the home of federation, neutrality, and data sovereignty.</em>
+    </div>
+  </div>
+</section>
+
+<!-- THE IMPOSSIBLE QUESTIONS -->
+<section class="questions-section" id="questions">
+  <div class="section-inner reveal">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-heading">The Impossible Questions</h2>
+    <p class="section-sub">Every organisation faces simple questions that are impossible to answer. The answers exist. They're scattered across systems that don't recognise each other.</p>
+
+    <div class="questions-grid">
+      <div class="q-card">
+        <span class="q-card-icon">📦</span>
+        <div class="q-card-question">"Where's my order?"</div>
+        <div class="q-card-sector">Supply Chain</div>
+      </div>
+      <div class="q-card">
+        <span class="q-card-icon">🏥</span>
+        <div class="q-card-question">"Have we a bed?"</div>
+        <div class="q-card-sector">Healthcare</div>
+      </div>
+      <div class="q-card">
+        <span class="q-card-icon">📊</span>
+        <div class="q-card-question">"How much am I overspending on IT?"</div>
+        <div class="q-card-sector">Enterprise</div>
+      </div>
+      <div class="q-card">
+        <span class="q-card-icon">🌍</span>
+        <div class="q-card-question">"How do I price this in Spain?"</div>
+        <div class="q-card-sector">Commercial</div>
+      </div>
+    </div>
+
+    <p class="questions-footer">These questions arise daily. The answers exist. They're just scattered across systems that don't recognise each other.</p>
+  </div>
+</section>
+
+<!-- THE INSIGHT -->
+<section class="insight-section">
+  <div class="section-inner reveal">
+    <div class="section-label">The Insight</div>
+    <h2 class="section-heading">Why These Questions Are Impossible</h2>
+
+    <div class="insight-columns">
+      <div class="insight-col insight-col--orthodox">
+        <h3>The Failed Orthodoxy</h3>
+        <p>Data lakes were sold as a single source of truth. Twenty years and billions of pounds later, frontline workers will tell you what a child could have: the problem was never missing or messy data. It's that systems use different words for the same things — and the same words for different things.</p>
+      </div>
+      <div class="insight-col insight-col--insight">
+        <h3>Those Differences Are Signal</h3>
+        <p>When "customer" means different things in sales, support, and product — that's not a data quality problem. That's operational intelligence hiding in plain sight. When "shipped" means three different things in three different systems, all three are true. Destroying that variance destroys meaning.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEDERATION, NOT CENTRALISATION -->
+<section class="federation-section">
+  <div class="section-inner reveal">
+    <div class="section-label">The Approach</div>
+    <h2 class="section-heading">Federation, Not Centralisation</h2>
+    <p class="section-sub">Instead of moving data into one place, we teach systems to answer questions together.</p>
+
+    <div class="fed-pillars">
+      <div class="fed-pillar">
+        <div class="fed-pillar-icon">🛡️</div>
+        <h3>Read-Only</h3>
+        <p>No system gives up control of its data. We query in place. Zero political battles over data ownership.</p>
+      </div>
+      <div class="fed-pillar">
+        <div class="fed-pillar-icon">💬</div>
+        <h3>Vocabulary-First</h3>
+        <p>We map what words mean in each system. When "shipped" means three different things, we preserve all three.</p>
+      </div>
+      <div class="fed-pillar">
+        <div class="fed-pillar-icon">👤</div>
+        <h3>Frontline-Focused</h3>
+        <p>Answers go to the people who need them — the nurse, the logistics coordinator, the customer service agent.</p>
+      </div>
+    </div>
+
+    <div class="fed-motto">No AI. No data lakes. Just the truth, good people need to do a good job.</div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-inner reveal">
+    <div class="section-label" style="color:var(--gold)">The Method</div>
+    <h2 class="section-heading section-heading--light">How It Works</h2>
+
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-num">1</div>
+        <h3>Question</h3>
+        <p>A frontline worker asks a simple question in natural language</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">2</div>
+        <h3>Vocabulary</h3>
+        <p>ZQL maps the question to what each system calls things locally</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">3</div>
+        <h3>Federation</h3>
+        <p>The query fans out to every relevant system simultaneously</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">4</div>
+        <h3>Revelation</h3>
+        <p>Answers are assembled and returned — often for the first time ever</p>
+      </div>
+    </div>
+
+    <div class="how-example">
+      <div class="how-example-label">Example · Swagelok Supply Chain</div>
+      <p>"Where is order #4721?" → ZQL queries SAP, DHL tracking, warehouse WMS, and the customer's ERP simultaneously. <strong>Sandra in customer service doesn't play detective</strong> — she gets everything she needs to complete the case in seconds. No stress. No four phone calls. No burnout from being set up to fail.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio-section" id="portfolio">
+  <div class="section-inner reveal">
+    <div class="section-label">Portfolio</div>
+    <h2 class="section-heading">Questions We've Answered</h2>
+    <p class="section-sub">Every engagement starts with a question someone needs answered. The question tells us which systems need to learn each other's language.</p>
+
+    <div class="portfolio-grid">
+
+      <a href="./cases/supply-chain.html" class="portfolio-card">
+        <div class="portfolio-card-sector"><span>📦</span> Supply Chain</div>
+        <div class="portfolio-card-question">"Where's my order?"</div>
+        <div class="portfolio-card-desc">Swagelok / Arbor Fluidtec. Cross-system visibility across manufacturer, logistics, warehouse, and customer ERP. From four phone calls to one screen.</div>
+        <div class="portfolio-card-systems">
+          <span>SAP</span><span>DHL</span><span>WMS</span><span>Customer ERP</span>
+        </div>
+      </a>
+
+      <a href="./cases/healthcare.html" class="portfolio-card">
+        <div class="portfolio-card-sector"><span>🏥</span> Healthcare</div>
+        <div class="portfolio-card-question">"Have we a bed?"</div>
+        <div class="portfolio-card-desc">NHS cross-trust federation. Real-time bed availability, patient flow, and capacity planning — without centralising patient data.</div>
+        <div class="portfolio-card-systems">
+          <span>Manchester Royal</span><span>Leeds General</span><span>Birmingham QE</span>
+        </div>
+      </a>
+
+      <a href="./cases/banking.html" class="portfolio-card">
+        <div class="portfolio-card-sector"><span>🏦</span> Financial Services</div>
+        <div class="portfolio-card-question">"Is this the same customer?"</div>
+        <div class="portfolio-card-desc">Cross-system entity resolution for AML compliance. When "customer" means different things across divisions, federation reveals the connections regulators need to see.</div>
+        <div class="portfolio-card-systems">
+          <span>Core Banking</span><span>Compliance</span><span>KYC/AML</span><span>Custody</span>
+        </div>
+      </a>
+
+      <a href="./cases/dora.html" class="portfolio-card">
+        <div class="portfolio-card-sector"><span>⚡</span> Regulatory Compliance</div>
+        <div class="portfolio-card-question">"Are we DORA-ready?"</div>
+        <div class="portfolio-card-desc">Operational resilience testing for 50,000 EU financial entities. Federation maps ICT dependencies across vendors without requiring anyone to surrender their data.</div>
+        <div class="portfolio-card-systems">
+          <span>ICT Inventory</span><span>Vendor Systems</span><span>Risk Register</span>
+        </div>
+      </a>
+
+      <a href="./cases/enterprise-it.html" class="portfolio-card">
+        <div class="portfolio-card-sector"><span>📊</span> Enterprise IT</div>
+        <div class="portfolio-card-question">"How much am I overspending on IT?"</div>
+        <div class="portfolio-card-desc">Cross-vendor spend optimisation. When three divisions buy the same capability from different vendors at different prices, federation reveals the waste.</div>
+        <div class="portfolio-card-systems">
+          <span>Procurement</span><span>ServiceNow</span><span>Vendor Contracts</span>
+        </div>
+      </a>
+
+      <a href="./cases/pricing.html" class="portfolio-card">
+        <div class="portfolio-card-sector"><span>🌍</span> Commercial Operations</div>
+        <div class="portfolio-card-question">"How do I price this in Spain?"</div>
+        <div class="portfolio-card-desc">Multi-country pricing logic across SAP and local regulations. When government caps conflict with global strategy, federation finds every edge case before production.</div>
+        <div class="portfolio-card-systems">
+          <span>SAP</span><span>Local Pricing Rules</span><span>Government Caps</span>
+        </div>
+      </a>
+
+      <a href="./cases/manufacturing.html" class="portfolio-card">
+        <div class="portfolio-card-sector"><span>🚗</span> Manufacturing</div>
+        <div class="portfolio-card-question">"What's causing the delay?"</div>
+        <div class="portfolio-card-desc">Cascade failure detection across multi-plant supply chains. When "downtime" means different things at each plant, the real cause hides between the definitions.</div>
+        <div class="portfolio-card-systems">
+          <span>Solihull</span><span>Halewood</span><span>Nitra</span><span>Suppliers</span>
+        </div>
+      </a>
+
+      <a href="./cases/resilience.html" class="portfolio-card">
+        <div class="portfolio-card-sector"><span>🔒</span> Cyber Resilience</div>
+        <div class="portfolio-card-question">"What still works if this system fails?"</div>
+        <div class="portfolio-card-desc">Non-digital twin operational continuity. Federation maps the actual dependency graph across your organisation, revealing what manual processes survive a system outage.</div>
+        <div class="portfolio-card-systems">
+          <span>IT Systems</span><span>Process Maps</span><span>BCP Plans</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="compare-section" id="compare">
+  <div class="section-inner reveal">
+    <div class="section-label">Why ZQL</div>
+    <h2 class="section-heading">Not AI. Not Another Data Lake.</h2>
+    <p class="section-sub">You've been here before. We know what you're thinking.</p>
+
+    <div class="compare-grid">
+      <div class="compare-row">
+        <div class="compare-them">
+          <div class="compare-label">AI / LLMs</div>
+          <h4>Hallucinate answers</h4>
+          <p>No audit trail. EU AI Act liability. Organisations are pausing adoption because they can't explain the output.</p>
+        </div>
+        <div class="compare-us">
+          <div class="compare-label">ZQL</div>
+          <h4>Returns what systems actually say</h4>
+          <p>Every answer is traceable to its source. No hallucination. Full audit trail. Compliance-ready from day one.</p>
+        </div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-them">
+          <div class="compare-label">Data Lakes / Warehouses</div>
+          <h4>Twenty years, billions spent</h4>
+          <p>Still can't answer frontline questions. Force harmonisation that destroys meaning and local intelligence.</p>
+        </div>
+        <div class="compare-us">
+          <div class="compare-label">ZQL</div>
+          <h4>Federates in place</h4>
+          <p>No migration. No harmonisation. Preserves local meaning as intelligence. Deployed in weeks, not years.</p>
+        </div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-them">
+          <div class="compare-label">Centralised Platforms</div>
+          <h4>Data flows to them</h4>
+          <p>Sovereignty is surrendered. Your data enriches their platform. The answers serve the one who watches, not the one who asks.</p>
+        </div>
+        <div class="compare-us">
+          <div class="compare-label">ZQL</div>
+          <h4>Data never leaves home</h4>
+          <p>Sovereign parts choosing to answer questions together. No central eye. The answer serves the one who asks.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="section-inner reveal">
+    <h2 class="cta-heading">The answers already exist.<br>Let's show you.</h2>
+    <p class="cta-sub">We'll walk through a question from your organisation and show you what federation reveals. Thirty minutes. No slides.</p>
+    <a href="https://calendly.com/zql" class="cta-button" target="_blank" rel="noopener">
+      <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Book a Call
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-entity">ZQL LLC (Switzerland) &nbsp;·&nbsp; atozql.com</div>
+  <div class="footer-note">The home of federation, neutrality, and data sovereignty.</div>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Close mobile nav on link click
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => revealObserver.observe(el));
+</script>
+
+</body>
+</html>
