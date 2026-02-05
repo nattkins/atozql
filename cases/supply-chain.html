@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>"Where's my order?" — ZQL Supply Chain Federation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --navy: #1B2541; --navy-deep: #131C33; --navy-light: #243154;
+  --gold: #C9A84C; --gold-soft: #D4BA6A; --gold-dim: rgba(201,168,76,0.15);
+  --cream: #F5F0E8; --cream-warm: #FAF7F2; --offwhite: #FDFCFA;
+  --text-dark: #1B2541; --text-body: #3A3F4B; --text-muted: #6B7085; --text-light: #B0B5C3; --text-on-dark: #E8E5DF;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: var(--sans); color: var(--text-body); background: var(--offwhite); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+
+/* Nav */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 2rem; height: 56px; display: flex; align-items: center; justify-content: space-between; background: rgba(27,37,65,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(201,168,76,0.12); }
+.nav-mark { font-family: var(--serif); font-size: 1.2rem; color: #fff; text-decoration: none; letter-spacing: 0.04em; }
+.nav-mark span { color: var(--gold); }
+.nav-back { color: var(--text-light); text-decoration: none; font-size: 0.82rem; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
+.nav-back:hover { color: #fff; }
+
+/* Hero */
+.case-hero { background: var(--navy-deep); padding: 7rem 2rem 4rem; position: relative; }
+.case-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); }
+.case-hero-inner { max-width: 900px; margin: 0 auto; }
+.case-sector { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.case-sector span { font-size: 1rem; }
+.case-question { font-family: var(--serif); font-style: italic; font-size: clamp(2.2rem, 5vw, 3.5rem); color: #fff; line-height: 1.1; margin-bottom: 1.2rem; }
+.case-lede { font-size: 1.1rem; color: var(--text-on-dark); max-width: 650px; line-height: 1.75; }
+.case-systems { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+.case-systems span { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.05em; background: var(--navy-light); color: var(--text-light); padding: 0.3rem 0.7rem; border-radius: 3px; border: 1px solid rgba(201,168,76,0.15); }
+
+/* Screenshot gallery */
+.case-gallery { background: var(--navy); padding: 3rem 2rem; }
+.case-gallery-inner { max-width: 1100px; margin: 0 auto; }
+.case-gallery-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+.case-screenshots { display: grid; gap: 1rem; }
+.case-screenshots.two-up { grid-template-columns: 1fr 1fr; }
+.case-screenshots.single { grid-template-columns: 1fr; }
+.case-shot { border-radius: 6px; overflow: hidden; border: 1px solid rgba(201,168,76,0.1); position: relative; }
+.case-shot img { width: 100%; height: auto; display: block; }
+.case-shot-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(19,28,51,0.92)); padding: 2rem 1.2rem 1rem; }
+.case-shot-caption p { color: var(--text-on-dark); font-size: 0.82rem; line-height: 1.5; }
+.case-shot-caption strong { color: #fff; }
+
+/* Narrative */
+.case-narrative { padding: 4rem 2rem; background: var(--offwhite); }
+.case-narrative-inner { max-width: 720px; margin: 0 auto; }
+.case-narrative h2 { font-family: var(--serif); font-size: 1.6rem; color: var(--text-dark); margin: 2.5rem 0 0.8rem; line-height: 1.2; }
+.case-narrative h2:first-child { margin-top: 0; }
+.case-narrative p { font-size: 0.95rem; color: var(--text-body); line-height: 1.8; margin-bottom: 1rem; }
+.case-narrative .highlight { background: var(--gold-dim); border-left: 3px solid var(--gold); padding: 1.2rem 1.5rem; border-radius: 0 4px 4px 0; margin: 1.5rem 0; }
+.case-narrative .highlight p { margin-bottom: 0; color: var(--text-dark); font-weight: 500; }
+
+/* CTA */
+.case-cta { background: var(--cream); padding: 4rem 2rem; text-align: center; }
+.case-cta h3 { font-family: var(--serif); font-size: 1.5rem; color: var(--text-dark); margin-bottom: 0.5rem; }
+.case-cta p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+.case-cta-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--gold); color: var(--navy); padding: 0.75rem 1.8rem; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.92rem; transition: all 0.2s; }
+.case-cta-btn:hover { background: var(--gold-soft); transform: translateY(-1px); }
+.case-back-link { display: inline-block; margin-top: 1rem; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; }
+.case-back-link:hover { color: var(--text-dark); }
+
+footer { background: var(--navy); padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.78rem; }
+
+@media (max-width: 768px) {
+  .case-screenshots.two-up { grid-template-columns: 1fr; }
+  .case-hero { padding: 6rem 1.5rem 3rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../" class="nav-mark">Z<span>Q</span>L</a>
+  <a href="../#portfolio" class="nav-back">← All Cases</a>
+</nav>
+
+<section class="case-hero">
+  <div class="case-hero-inner">
+    <div class="case-sector"><span>📦</span> Supply Chain Federation</div>
+    <h1 class="case-question">"Where's my order?"</h1>
+    <p class="case-lede">Swagelok manufactures precision fluid system components and distributes through 55+ independent distributors across Europe. When a customer calls asking where their order is, the answer lives in five different systems owned by five different organisations. Nobody has the whole picture.</p>
+    <div class="case-systems">
+      <span>SAP (Manufacturer)</span>
+      <span>DHL Tracking</span>
+      <span>Warehouse WMS</span>
+      <span>Customs Systems</span>
+      <span>Customer ERP</span>
+    </div>
+  </div>
+</section>
+
+<section class="case-gallery">
+  <div class="case-gallery-inner">
+    <div class="case-gallery-label">Working Demonstration</div>
+    <div class="case-screenshots single">
+      <div class="case-shot">
+        <img src="../img/swagelok-wismo.jpg" alt="Swagelok Network Federation — European distribution network with order tracing and semantic variance display">
+        <div class="case-shot-caption">
+          <p><strong>Federation across the Swagelok European distributor network.</strong> The network map shows 7 distributors spanning 28 countries. Order tracing queries SAP, DHL, warehouse, customs, and customer systems simultaneously. The semantic variance panel (bottom) reveals what "available" actually means in each system.</p>
+        </div>
+      </div>
+    </div>
+    <div class="case-screenshots two-up" style="margin-top: 1rem;">
+      <div class="case-shot">
+        <img src="../img/swagelok-correlation.jpg" alt="Correlation Engine showing particle-to-bundle matching across source systems">
+        <div class="case-shot-caption">
+          <p><strong>Correlation Engine.</strong> Events from different systems are matched into coherent bundles — revealing order status across carriers and borders.</p>
+        </div>
+      </div>
+      <div class="case-shot">
+        <img src="../img/swagelok-provenance.jpg" alt="Data provenance view showing source system attribution for each data point">
+        <div class="case-shot-caption">
+          <p><strong>Provenance tracking.</strong> Every piece of data shows where it came from and how fresh it is. Visual differences are information, not bugs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case-narrative">
+  <div class="case-narrative-inner">
+    <h2>The Problem Sandra Knows Too Well</h2>
+    <p>Sandra works in customer service at Arbor Fluidtec, a Swagelok distributor in Switzerland. When a customer calls asking about order #4721, Sandra's day becomes detective work. She checks SAP for the order details. Calls DHL for the tracking status. Phones the warehouse to see if cartons have been picked. Emails customs if the shipment is crossing borders. Sometimes calls the customer's own procurement team to check what they've received.</p>
+    <p>Four phone calls. Three systems. Forty-five minutes. And the customer is still waiting on the line.</p>
+
+    <h2>What Federation Reveals</h2>
+    <p>ZQL queries all five systems simultaneously. Sandra types the order number once. In seconds, she sees: the order was split into three cartons, two have cleared customs in Munich, one is still at the DHL hub in Leipzig waiting for a consolidation window, estimated delivery is Thursday.</p>
+
+    <div class="highlight">
+      <p>Sandra doesn't play detective any more. She gets everything she needs to complete the case presented to her clearly in seconds. No stress. No four phone calls. No burnout from being set up to fail.</p>
+    </div>
+
+    <h2>The Hidden Intelligence</h2>
+    <p>The word "available" means five different things across the Swagelok supply chain. In SAP, it means stock exists in the system. In the warehouse, it means physically picked and ready to ship. At DHL, it means capacity allocated and transport slot secured. At customs, it means documentation complete and duties calculated. At the customer's end, it means received, QC passed, and ready to use.</p>
+    <p>Traditional integration destroys these differences by forcing a single definition. ZQL preserves them. Each one tells you something different about where the order actually is. The semantic variance is the intelligence.</p>
+
+    <h2>The Business Case</h2>
+    <p>A $5 part that's three days late can cost $1M per day when it's holding up a facility build. SAP knows the part costs $5. The customer knew this when they placed the order. The relationship manager knows how precarious the relationship is. The true cost only exists across all these systems.</p>
+    <p>One distributor proven. Fifty-five in the pipeline. Deployed in weeks, not years. No migration required.</p>
+  </div>
+</section>
+
+<section class="case-cta">
+  <h3>See it work with your supply chain</h3>
+  <p>We'll walk through a real order query. Thirty minutes. No slides.</p>
+  <a href="https://calendly.com/zql" class="case-cta-btn" target="_blank" rel="noopener">Book a Call</a>
+  <br><a href="../#portfolio" class="case-back-link">← Back to all cases</a>
+</section>
+
+<footer>ZQL LLC (Switzerland) · atozql.com</footer>
+
+</body>
+</html>
