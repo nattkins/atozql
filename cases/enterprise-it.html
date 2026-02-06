@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise IT — ZQL</title>
+<meta name="description" content="Your integration platform is the most expensive system that produces nothing. ZQL federates across existing systems without moving data or forcing harmonisation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="./" class="nav-mark">Z<span>Q</span>L</a>
+  <div class="nav-links" id="navLinks">
+    <a href="./#questions">The Questions</a>
+    <a href="./#how">How It Works</a>
+    <a href="./framework.html">Framework</a>
+    <a href="./#portfolio">Portfolio</a>
+    <a href="./#compare">Why ZQL</a>
+    <a href="./#cta" class="nav-cta">Book a Call</a>
+  </div>
+  <button class="nav-mobile" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="section-label">Enterprise Architecture</div>
+    <h1>Your most expensive system<br><em>produces nothing.</em></h1>
+    <p class="page-hero-sub">The integration platform. The middleware. The "enterprise data model" project that's been running for three years. They exist because your systems don't agree on what words mean. The orthodox solution is to force agreement. The result is a brittle, expensive, political bottleneck that slows every change. There's another way.</p>
+  </div>
+</section>
+
+<!-- ========== THE DEATH SPIRAL ========== -->
+<section class="content-section">
+  <div class="content-inner">
+    <div class="section-label">The Pattern</div>
+    <h2 class="section-heading">The Integration Death Spiral</h2>
+
+    <p>Every enterprise with heterogeneous systems is trapped in the same pattern. It starts when one system becomes the "single source of truth" — SAP, Oracle, Salesforce, it doesn't matter which. Other systems are forced to integrate via point-to-point connections or expensive middleware. Each integration requires semantic mapping: translating between ontologies, reconciling definitions, resolving conflicts.</p>
+
+    <p>Local teams lose autonomy over their data models. Innovation slows because everything must conform to the master system's schema. The organisation becomes brittle — it can't adapt because the central ontology is the bottleneck. Enterprise architects call this "technical debt." What it actually is: information entropy caused by forced uniformity.</p>
+
+    <div class="callout-box">
+      <p><strong>Van Campen's Law:</strong> Information deficit equals entropy in living systems. When you force semantic standardisation, you create information deficit — local context gets lost. Information deficit causes entropy (disorder, dysfunction). Systems become rigid and unable to adapt. Eventually they fail. Traditional integration approaches maximise information deficit by forcing everything into one ontology. This is physics, not opinion.</p>
+    </div>
+
+    <!-- IMAGE: The IT Architecture Health Check dashboard showing phantom integrations, zombie systems, and the gap between documented and actual architecture -->
+
+    <h3>The Three Options Every Enterprise Faces</h3>
+
+    <div class="three-options">
+      <div class="option-card bad">
+        <h4>1. Keep Going</h4>
+        <p>Slow death via brittleness. Mounting technical debt. Every new integration takes longer than the last. Every system change risks cascade failure. The middleware bill grows. Innovation stalls.</p>
+        <div class="option-verdict">Slow decline</div>
+      </div>
+      <div class="option-card bad">
+        <h4>2. Rip and Replace</h4>
+        <p>£50M+ project. 5+ years. 70% probability of failure. Business disruption during transition. And at the end, you have a new single source of truth that will become the next bottleneck.</p>
+        <div class="option-verdict">Expensive gamble</div>
+      </div>
+      <div class="option-card good">
+        <h4>3. Federate</h4>
+        <p>All existing systems stay in place. Each keeps its own data model. ZQL federates across them — read-only, no data movement, no forced harmonisation. First value in weeks. Systems become autonomous again while maintaining connectivity.</p>
+        <div class="option-verdict">Weeks to value</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WHY TRADITIONAL FAILS ========== -->
+<section class="content-section alt-bg">
+  <div class="content-inner">
+    <div class="section-label">Why They Fail</div>
+    <h2 class="section-heading">The Middleware Graveyard</h2>
+
+    <p>Every approach that tries to solve variety with uniformity fails for the same structural reason: they destroy the local context that makes information valuable.</p>
+
+    <div class="comparison-table">
+      <div class="comp-row header">
+        <div class="comp-cell">Approach</div>
+        <div class="comp-cell">Promise</div>
+        <div class="comp-cell">Reality</div>
+        <div class="comp-cell">Timeline</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell"><strong>MDM / ESB</strong><br>(MuleSoft, Informatica)</div>
+        <div class="comp-cell">Central integration hub normalises everything</div>
+        <div class="comp-cell">2–3 year "enterprise data model" project. Becomes the new bottleneck. Never finishes.</div>
+        <div class="comp-cell bad-text">24–36 months</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell"><strong>Data Lake / Warehouse</strong><br>(Snowflake, Databricks)</div>
+        <div class="comp-cell">Copy everything into one place, query at will</div>
+        <div class="comp-cell">Data swamp within months. Stale on arrival. No operational value. "Where did this number come from?"</div>
+        <div class="comp-cell bad-text">36+ months</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell"><strong>Data Federation</strong><br>(Palantir, Dremio)</div>
+        <div class="comp-cell">Query in place without moving data</div>
+        <div class="comp-cell">Still requires semantic layer (forced standardisation). Still centralised server. Still destroys local context. Just more expensive middleware.</div>
+        <div class="comp-cell bad-text">18–24 months</div>
+      </div>
+      <div class="comp-row good-row">
+        <div class="comp-cell"><strong>ZQL Federation</strong></div>
+        <div class="comp-cell">Federate across systems preserving local meaning</div>
+        <div class="comp-cell">Read-only. No data movement. Local vocabularies preserved. Variance surfaced as signal. First question answered in weeks.</div>
+        <div class="comp-cell good-text">8 weeks</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== THE ZQL DIFFERENCE ========== -->
+<section class="content-section">
+  <div class="content-inner">
+    <div class="section-label">The Difference</div>
+    <h2 class="section-heading">Variance Is Signal, Not Noise</h2>
+
+    <p>When SAP says "customer" and Salesforce says "customer," they mean different things. SAP means "entity with a billing address and payment terms." Salesforce means "entity with a pipeline stage and contact history." Traditional integration forces these into a single definition and destroys the context that makes each valuable.</p>
+
+    <p>ZQL preserves both definitions. It knows that SAP's "customer" is a SACK (collection of financial attributes) and Salesforce's "customer" is a STACK (sequence of interactions). When you ask "show me at-risk customers," ZQL queries both systems in their native language and presents the federation — the financial picture AND the relationship picture — without collapsing either into the other.</p>
+
+    <!-- IMAGE: Diagram showing SAP and Salesforce with different "customer" definitions, ZQL federating across both without harmonisation, returning a combined view that preserves local context -->
+
+    <div class="callout-box gold">
+      <p><strong>The shape is universal. The interpretation is local.</strong> SAP returns SLOTs and STACKs. Salesforce returns SLOTs and STACKs. The shapes are identical. What they mean is different. That difference is operational intelligence — destroy it and you're flying blind.</p>
+    </div>
+
+    <h3>What Your Enterprise Architect Gets</h3>
+
+    <div class="benefit-grid">
+      <div class="benefit-item">
+        <h4>Live Architecture Map</h4>
+        <p>See the actual integrations — not the documented ones. The IT Health Check reveals phantom connections (active but undocumented), zombie systems (documented but unused), and mismatches (connected to the wrong target).</p>
+      </div>
+      <div class="benefit-item">
+        <h4>No Political Battles</h4>
+        <p>Read-only federation means nobody gives up control of their data. No "who owns the customer record" arguments. Each system remains sovereign. ZQL just translates between them.</p>
+      </div>
+      <div class="benefit-item">
+        <h4>Incremental Adoption</h4>
+        <p>Start with one question ("where's my order?" or "who is this customer?"). Add systems as trust builds. No big-bang transformation. No 18-month project before first value.</p>
+      </div>
+      <div class="benefit-item">
+        <h4>Migration Insurance</h4>
+        <p>Planning to replace SAP? Replace Salesforce? ZQL's federation layer means you can swap systems underneath without breaking cross-system visibility. The vocabulary stays even when the platform changes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== THE MICROSOFT PROBLEM ========== -->
+<section class="content-section alt-bg">
+  <div class="content-inner">
+    <div class="section-label">The Elephant</div>
+    <h2 class="section-heading">The SharePoint / Copilot Trap</h2>
+
+    <p>345 million Microsoft 365 subscribers. 80% of Fortune 500. And now Copilot is being force-integrated across every surface — Teams, SharePoint, Outlook, even Notepad. The promise: AI-powered productivity. The reality: hallucinated meeting summaries, aggressive bullet-point platitudes, and a pay-per-page pricing model for document classification that used to be included.</p>
+
+    <p>The deeper problem isn't Copilot's quality. It's the sovereignty trap. Your documents, your workflows, your institutional knowledge — all inside a platform whose licensing complexity requires dedicated specialists to navigate, whose pricing changes unilaterally, and whose AI integration you cannot turn off.</p>
+
+    <div class="callout-box">
+      <p><strong>Organisations don't want to escape Microsoft. They want to escape lock-in.</strong> ZQL's federation layer sits across Microsoft and non-Microsoft systems equally. It means your institutional knowledge isn't trapped inside SharePoint's ontology. It means your workflows aren't dependent on Power Automate's pricing. It means when licensing changes (and it will), you have options.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="cta-section">
+  <div class="section-inner">
+    <h2 class="cta-heading">How much is your middleware costing you?</h2>
+    <p class="cta-sub">We'll run a read-only IT Health Check against your actual systems — phantom integrations, zombie applications, and the real architecture underneath the documented one.</p>
+    <a href="https://calendly.com/zql" class="cta-button" target="_blank" rel="noopener">
+      <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Book a Call
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-entity">ZQL LLC (Switzerland) · atozql.com</div>
+  <div class="footer-note">The home of federation, neutrality, and data sovereignty.</div>
+</footer>
+
+<script>
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+</script>
+</body>
+</html>

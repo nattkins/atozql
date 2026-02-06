@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DORA Compliance — ZQL</title>
+    <meta name="description"
+        content="50,000 EU financial entities need a Register of Information they can't game. ZQL federates it from live systems — traceable, auditable, impossible to fake.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <nav id="mainNav">
+        <a href="./" class="nav-mark">Z<span>Q</span>L</a>
+        <div class="nav-links" id="navLinks">
+            <a href="./#questions">The Questions</a>
+            <a href="./#how">How It Works</a>
+            <a href="./framework.html">Framework</a>
+            <a href="./#portfolio">Portfolio</a>
+            <a href="./#compare">Why ZQL</a>
+            <a href="./#cta" class="nav-cta">Book a Call</a>
+        </div>
+        <button class="nav-mobile" onclick="document.getElementById('navLinks').classList.toggle('open')"
+            aria-label="Menu">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </nav>
+
+    <!-- ========== HERO ========== -->
+    <section class="page-hero">
+        <div class="page-hero-inner">
+            <div class="section-label">Financial Services</div>
+            <h1>50,000 entities need a Register of Information.<br>Most are <em>faking it.</em></h1>
+            <p class="page-hero-sub">DORA requires every EU financial entity to maintain a live register of ICT
+                third-party dependencies — 15 templates, 100+ fields, 116 validation rules. The current approach?
+                Spreadsheets filled in quarterly by people who don't know the answers. ZQL federates the Register from
+                live systems. The RoI becomes a Q³ instrument — traceable, auditable, and impossible to game.</p>
+        </div>
+    </section>
+
+    <!-- ========== THE PROBLEM ========== -->
+    <section class="content-section">
+        <div class="content-inner">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-heading">The Register of Information Is a Soviet Exercise</h2>
+
+            <p>DORA's Register of Information is 15 templates organised into 7 functional groups. It maps every ICT
+                third-party provider, every contract, every subcontractor, every business function dependent on external
+                technology. It requires LEI validation, supply chain depth mapping, concentration risk identification,
+                and cross-referencing across all templates.</p>
+
+            <p>Here's what actually happens: a compliance officer emails department heads asking them to fill in a
+                spreadsheet. The department heads forward it to someone junior. That person guesses. The spreadsheet
+                goes back up the chain. Nobody validates the LEIs. Nobody checks the subcontractor chains. Nobody maps
+                the concentration risks. The Register passes initial submission because the format is correct — but the
+                content is fiction.</p>
+
+            <div class="callout-box">
+                <p><strong>This is The Soviet archetype in action.</strong> The centre demands the Register. The edge
+                    fills it in to survive the audit, not to tell the truth. The centre can't verify because they don't
+                    have visibility into the actual systems. Everyone knows the Register is incomplete, but the game
+                    rewards submission over accuracy.</p>
+            </div>
+
+            <!-- IMAGE: Screenshot of the ZQL DORA demo showing the ICT dependency graph with concentration risks highlighted — the Equinix node showing 4 dependency paths -->
+
+            <h3>The Numbers That Should Worry You</h3>
+
+            <div class="stat-row-grid">
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Templates across 7 groups</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Data fields requiring validation</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">116</div>
+                    <div class="stat-label">Quality checks per submission</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">60%</div>
+                    <div class="stat-label">Of failures are in Template B_05.01 (Provider Master List)</div>
+                </div>
+            </div>
+
+            <p>Template B_05.01 — the ICT Third-Party Service Provider master list — is where most organisations fail.
+                It requires valid LEIs (checked against GLEIF), parent undertaking chains, country-of-data-processing
+                for every provider, annual expense figures, and subcontractor flags. Most organisations don't even know
+                who their fourth-party providers are, let alone their LEIs.</p>
+        </div>
+    </section>
+
+    <!-- ========== THE SOLUTION ========== -->
+    <section class="content-section alt-bg">
+        <div class="content-inner">
+            <div class="section-label">The ZQL Approach</div>
+            <h2 class="section-heading">Federate the Register From Live Systems</h2>
+
+            <p>Instead of asking humans to fill in spreadsheets, ZQL federates the Register of Information from the
+                systems that already contain the data: contract management systems, CMDBs, vendor portals, risk
+                registers, and procurement platforms.</p>
+
+            <div class="two-col">
+                <div class="col">
+                    <h3>How It Works</h3>
+                    <p>ZQL adapters connect (read-only) to your existing systems. The DORA lens maps each system's
+                        native data onto the 15-template structure. Where data is missing or inconsistent, ZQL surfaces
+                        the gap rather than hiding it — because a known gap is manageable, while an unknown gap is a
+                        liability.</p>
+                    <p>The Register isn't generated once and filed. It's a live federation — every query pulls current
+                        data from source systems. When a contract changes, the Register reflects it. When a
+                        subcontractor relationship shifts, the concentration risk map updates. When an LEI lapses, the
+                        validation catches it.</p>
+                </div>
+                <div class="col">
+                    <h3>What Changes</h3>
+                    <p><strong>Before:</strong> Quarterly spreadsheet exercise. Department heads guess. Compliance
+                        formats. Nobody validates. Everyone pretends.</p>
+                    <p><strong>After:</strong> Live federated register. Data pulled from source systems. Gaps surfaced
+                        automatically. Concentration risks computed from actual dependency graphs, not self-reported
+                        assessments. Every answer traceable to the system that produced it.</p>
+                    <p>The Register becomes what DORA intended: a live map of ICT dependency. Not a compliance document.
+                        A management instrument.</p>
+                </div>
+            </div>
+
+            <!-- IMAGE: Side-by-side comparison — left showing the "before" (spreadsheet chaos, email chains, manual entry), right showing the "after" (live dependency graph federated from CMDB, contract system, vendor portal) -->
+
+            <div class="callout-box gold">
+                <p><strong>The key insight:</strong> DORA doesn't just require a Register — it requires that the
+                    Register be accurate. Article 28(3) mandates that financial entities "identify and assess" ICT
+                    concentration risk. You can't assess what you can't see. Federation makes the invisible visible.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CONCENTRATION RISK ========== -->
+    <section class="content-section">
+        <div class="content-inner">
+            <div class="section-label">The Hidden Risk</div>
+            <h2 class="section-heading">Concentration Risk Is a Graph Problem</h2>
+
+            <p>Your organisation uses Microsoft 365. Your payment processor uses Azure. Your CRM runs on Azure. Your
+                data warehouse runs on Azure. Your third-party risk platform runs on Azure. You've reported five
+                separate ICT arrangements — but you have one concentration risk: Microsoft.</p>
+
+            <p>Now go deeper. Microsoft's data centres are hosted by Equinix. Your backup provider also uses Equinix.
+                Your disaster recovery site uses Equinix. Three apparently independent providers share a single
+                fourth-party dependency that nobody mapped because nobody looked past the first tier.</p>
+
+            <!-- IMAGE: The ICT dependency graph from the DORA demo — showing the network with Equinix as a critical concentration node, multiple paths converging -->
+
+            <div class="callout-box">
+                <p><strong>ZQL computes concentration risk from the actual dependency graph</strong> — not from
+                    self-reported assessments. It traverses third-party and fourth-party relationships, identifies
+                    convergence points, and flags concentration risks that wouldn't be visible from any single system's
+                    perspective. This is a Q³ operation: the answer depends not just on the data (Q¹) or the context
+                    (Q²) but on the game being played between parties who may not want their dependencies known.</p>
+            </div>
+
+            <h3>What the Regulator Will Ask</h3>
+
+            <p>When the ESAs review your Register of Information, they won't just check format compliance. They'll ask:
+            </p>
+
+            <div class="question-list">
+                <div class="question-item">
+                    <div class="q-marker">1</div>
+                    <div class="q-text"><strong>Completeness:</strong> Have you documented ALL ICT third-party
+                        arrangements, including intra-group? Template B_02.01 must be exhaustive.</div>
+                </div>
+                <div class="question-item">
+                    <div class="q-marker">2</div>
+                    <div class="q-text"><strong>Depth:</strong> Have you mapped subcontractor chains? Template B_05.02
+                        requires rank-in-chain for every provider relationship.</div>
+                </div>
+                <div class="question-item">
+                    <div class="q-marker">3</div>
+                    <div class="q-text"><strong>Concentration:</strong> Have you identified where multiple arrangements
+                        converge on single providers? Article 28(5) requires concentration risk assessment.</div>
+                </div>
+                <div class="question-item">
+                    <div class="q-marker">4</div>
+                    <div class="q-text"><strong>Currency:</strong> Is this Register current, or was it accurate six
+                        months ago? DORA requires ongoing maintenance, not annual snapshots.</div>
+                </div>
+                <div class="question-item">
+                    <div class="q-marker">5</div>
+                    <div class="q-text"><strong>Provenance:</strong> Can you show where each data point came from? If
+                        challenged, can you trace an answer to its source system?</div>
+                </div>
+            </div>
+
+            <p>A spreadsheet can answer question 1, badly. Only a federated system can answer questions 2–5.</p>
+        </div>
+    </section>
+
+    <!-- ========== IMPLEMENTATION ========== -->
+    <section class="content-section alt-bg">
+        <div class="content-inner">
+            <div class="section-label">Implementation</div>
+            <h2 class="section-heading">Eight Weeks to a Live Register</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">Week 1–2</div>
+                    <div class="timeline-content">
+                        <h4>System Mapping</h4>
+                        <p>Identify which systems contain contract data, provider information, and service dependencies.
+                            Map to DORA template structure. Identify gaps before touching any technology.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">Week 3–4</div>
+                    <div class="timeline-content">
+                        <h4>Adapter Deployment</h4>
+                        <p>Read-only adapters connect to contract management, CMDB, vendor portal, and procurement
+                            systems. No data moves — ZQL queries in place.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">Week 5–6</div>
+                    <div class="timeline-content">
+                        <h4>Register Federation</h4>
+                        <p>DORA lens maps source data to all 15 templates. Validation rules applied. Gaps surfaced.
+                            Concentration risk graph computed.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">Week 7–8</div>
+                    <div class="timeline-content">
+                        <h4>Compliance Review</h4>
+                        <p>Live Register demonstrated to compliance team. Gap remediation prioritised. Export to ESA
+                            submission format. Ongoing federation maintained.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="compare-row">
+                <div class="compare-item bad">
+                    <h4>Traditional Approach</h4>
+                    <p>6–12 months. Consulting engagement. Spreadsheet collection. Manual validation. Outdated on
+                        delivery.</p>
+                </div>
+                <div class="compare-item good">
+                    <h4>ZQL Federation</h4>
+                    <p>8 weeks. Read-only adapters. Live data. Automatic validation. Always current.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="cta-section">
+        <div class="section-inner">
+            <h2 class="cta-heading">Your Register is due. Is it real?</h2>
+            <p class="cta-sub">We'll show you what a federated Register of Information looks like using your actual
+                systems — read-only, no data movement, live in weeks.</p>
+            <a href="https://calendly.com/zql" class="cta-button" target="_blank" rel="noopener">
+                <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>
+                Book a Call
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-entity">ZQL LLC (Switzerland) · atozql.com</div>
+        <div class="footer-note">The home of federation, neutrality, and data sovereignty.</div>
+    </footer>
+
+    <script>
+        const nav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+        document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+    </script>
+</body>
+
+</html>
