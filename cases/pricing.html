@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — ZQL</title>
+<meta name="description" content="Read-only federation. No rip-and-replace. First value in weeks. Here's what it costs and what you get.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="../" class="nav-mark">Z<span>Q</span>L</a>
+  <div class="nav-links" id="navLinks">
+    <a href="../#questions">The Questions</a>
+    <a href="../#how">How It Works</a>
+    <a href="../framework.html">Framework</a>
+    <a href="../#portfolio">Portfolio</a>
+    <a href="../#compare">Why ZQL</a>
+    <a href="../#cta" class="nav-cta">Book a Call</a>
+  </div>
+  <button class="nav-mobile" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</nav>
+
+<section class="case-hero">
+  <div class="case-hero-inner">
+    <div class="case-sector"><span>💰</span> Commercial Model</div>
+    <h1 class="case-question">"What does this actually cost?"</h1>
+    <p class="case-lede">Federation is not a consulting engagement that stretches into years. It's not a platform licence that grows with your data volume. It's a specific deployment — adapters to your existing systems, a lens for your specific question, and a cockpit for your team. Here's how it works.</p>
+    <div class="case-systems"><span>Discovery</span><span>Adapters</span><span>Lenses</span><span>Cockpit</span><span>Maintenance</span></div>
+  </div>
+</section>
+
+<section class="case-gallery">
+  <div class="case-gallery-inner">
+    <div class="case-gallery-label">Architecture Overview</div>
+    <div class="case-shot">
+      <!-- IMAGE: Clean architecture diagram showing the ZQL deployment model — adapters connecting to existing systems (SAP, Salesforce, carriers etc.), the lens layer translating questions, the cockpit presenting answers, all running in a single Docker container on the customer's infrastructure -->
+      <img src="../img/zql-architecture.jpg" alt="ZQL deployment architecture showing adapters, lenses, and cockpit layers">
+      <div class="case-shot-caption"><p><strong>Everything runs on your infrastructure.</strong> A single Docker container — PostgreSQL with Foreign Data Wrappers, PostgREST for zero-code API, and nginx for the frontend. Approximately 500MB. Outbound connections only. No firewall changes needed. Your data never leaves your network.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="case-narrative">
+  <div class="case-narrative-inner">
+
+    <h2>How It's Structured</h2>
+    <p>A ZQL deployment has four components. Each is independently useful, each builds on the previous one.</p>
+
+    <p><strong>Discovery (£5–15K · 2 weeks).</strong> We answer your first question using your actual systems. No slides. No architecture diagrams. We connect, we federate, we show you the answer. If the answer isn't valuable, stop here. This is our risk, not yours — we're demonstrating capability, not selling a roadmap.</p>
+
+    <p><strong>Adapters (£50–75K per system · 2–4 weeks each).</strong> Read-only connectors to your existing systems. SAP, Salesforce, Oracle, ServiceNow, carriers, customs, warehouse systems — each adapter translates between the system's native language and ZQL's shape vocabulary. Adapters are reusable across lenses. Connect once, query forever.</p>
+
+    <p><strong>Lenses (£25–50K each · 2–4 weeks).</strong> A lens is a specific question made queryable. "Where Is My Stuff" is a lens. "Is This the Same Customer" is a lens. "Show Me My ICT Dependencies" is a lens. Each lens defines which adapters to query, how to correlate the results, and what the answer looks like for different roles. Lenses are published on IPFS — the same lens can be deployed at different organisations with different adapters underneath.</p>
+
+    <p><strong>Cockpit (included with first lens).</strong> Your team's deployed instance. A web interface running on your infrastructure. Role-based views — Sandra in customer service sees different emphasis than Marko in logistics. Actions configured to your workflows: email alerts, Teams notifications, Jira ticket creation, escalation paths.</p>
+
+    <div class="highlight"><p>A typical first deployment — discovery, three adapters, one lens, cockpit deployed — runs £175–275K over 8–12 weeks. Compare: MuleSoft implementation at 18–24 months and £500K+. MDM project at 24–36 months and £1M+. Data warehouse rebuild at 36+ months and £2M+.</p></div>
+
+    <h2>Ongoing Costs</h2>
+    <p><strong>Adapter maintenance: 20% annually.</strong> Covers API changes, schema updates, and version compatibility. Your systems change — the adapters stay current.</p>
+    <p><strong>Lens maintenance: £15–25K/year.</strong> Question evolution, new correlation rules, threshold adjustments. As your team uses the federation, they'll discover new questions. The lens grows with use.</p>
+    <p><strong>Additional lenses: £25–50K each.</strong> Once adapters are connected, adding new questions is faster. The second lens reuses existing connections. The third lens is faster still. The marginal cost of each new question decreases because the federation infrastructure is already in place.</p>
+
+    <h2>Sector-Specific Pricing</h2>
+
+    <p><strong>DORA Compliance (Financial Services).</strong> Register of Information federation from contract management, CMDB, vendor portal, and procurement systems. 15 templates, 116 validation rules, concentration risk graph. Typically £200–350K first year including discovery, adapters, DORA lens, and first submission support. Ongoing maintenance £50–75K/year. Compare: Big 4 DORA engagement at £500K–1M with a spreadsheet deliverable that's outdated on delivery.</p>
+
+    <p><strong>Supply Chain Visibility (Manufacturing / Distribution).</strong> WISMO lens across ERP, WMS, carriers, and customs. Typically £150–250K first year. Pays for itself through reduced customer service time (15 minutes → 30 seconds per query), lower carrier dispute costs, and improved on-time delivery metrics.</p>
+
+    <p><strong>Non-Digital Twin (Cyber Resilience).</strong> Different model — this is methodology plus documentation, not system federation. Discovery £5–10K. Full diagnostic £25–40K. Complete Twin £50–75K. Maintenance £15–20K/year. Premium reduction of 15–20% on cyber insurance typically covers ongoing maintenance costs. The Twin pays for itself.</p>
+
+    <h2>What You Don't Pay For</h2>
+    <p><strong>No per-query charges.</strong> Federation is unlimited once deployed. Your team asks as many questions as they need.</p>
+    <p><strong>No data volume pricing.</strong> ZQL doesn't move or store your data. There's nothing to meter.</p>
+    <p><strong>No user seat licensing.</strong> The cockpit serves your whole team. Add users without cost negotiations.</p>
+    <p><strong>No lock-in.</strong> Adapters use standard protocols (REST, JDBC/ODBC, FDW). Lenses are published on IPFS. If you want to leave, your configuration is portable. We'd rather earn renewal than enforce it.</p>
+
+    <div class="highlight"><p>The question isn't "can we afford federation?" It's "what is the current cost of not having it?" — the middleware bill, the manual reconciliation hours, the customer service hold times, the compliance risk, the integration tax on every change request. Most organisations find the answer uncomfortable.</p></div>
+
+  </div>
+</section>
+
+<section class="case-cta">
+  <h3>Start with one question. See what it's worth.</h3>
+  <p>The discovery engagement is our risk. If the answer isn't valuable, stop. No lock-in. No roadmap. Just: does this work for your actual problem?</p>
+  <a href="https://calendly.com/zql" class="case-cta-btn" target="_blank" rel="noopener">Book a Call</a>
+  <br><a href="../#portfolio" class="case-back-link">← Back to all cases</a>
+</section>
+
+<footer>ZQL LLC (Switzerland) · atozql.com</footer>
+
+<script>
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+</script>
+</body>
+</html>

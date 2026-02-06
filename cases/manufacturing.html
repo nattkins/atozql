@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manufacturing &amp; Supply Chain — ZQL</title>
+<meta name="description" content="'Delivered' means four different things in four different systems. ZQL federates order visibility across carriers, customs, ERP, and warehouse — without moving data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="../" class="nav-mark">Z<span>Q</span>L</a>
+  <div class="nav-links" id="navLinks">
+    <a href="../#questions">The Questions</a>
+    <a href="../#how">How It Works</a>
+    <a href="../framework.html">Framework</a>
+    <a href="../#portfolio">Portfolio</a>
+    <a href="../#compare">Why ZQL</a>
+    <a href="../#cta" class="nav-cta">Book a Call</a>
+  </div>
+  <button class="nav-mobile" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</nav>
+
+<section class="case-hero">
+  <div class="case-hero-inner">
+    <div class="case-sector"><span>📦</span> Supply Chain Federation</div>
+    <h1 class="case-question">"Where is my stuff?"</h1>
+    <p class="case-lede">A fluid systems distributor ships precision fittings, regulators, and tubing across Europe. When a chemical plant in Rotterdam calls asking about a missing carton, the customer service rep has to check SAP for the order, the WMS for the pick, DHL for the tracking, customs for the declaration, and a local carrier for the last mile. Five systems, five logins, fifteen minutes. The customer is on hold the entire time.</p>
+    <div class="case-systems"><span>SAP Business One</span><span>Warehouse WMS</span><span>DHL Express</span><span>Customs (e-Dec)</span><span>Local Carrier</span><span>Customer ERP</span></div>
+  </div>
+</section>
+
+<section class="case-gallery">
+  <div class="case-gallery-inner">
+    <div class="case-gallery-label">Working Demonstration</div>
+    <div class="case-shot">
+      <!-- IMAGE: Screenshot of the Swagelok WISMO dramatisation — Sandra's view showing the federated order timeline with carrier handoffs, customs holds, and the missing carton investigation. The correlation engine matching events across systems. -->
+      <img src="../img/swagelok-wismo.jpg" alt="ZQL supply chain federation showing federated order timeline across carrier, customs, and warehouse systems">
+      <div class="case-shot-caption"><p><strong>Federated order visibility.</strong> Sandra doesn't search five systems. She asks one question. ZQL fans out to SAP, WMS, carriers, and customs simultaneously. The correlation engine matches events across systems by time, reference number, and physical markers — including a letter-sequence on carton stickers that lets receiving dock workers spot missing boxes without scanning anything.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="case-narrative">
+  <div class="case-narrative-inner">
+
+    <h2>The Darwinian Pathology</h2>
+    <p>This is the Darwinian archetype. Each system evolved independently to solve its own problem well. SAP tracks commercial obligations. The WMS tracks physical locations. DHL tracks shipments in its network. Customs tracks declarations. The local last-mile carrier tracks handoffs. Each system works. None of them talk to each other. And every one of them has a different definition of "delivered."</p>
+    <p>SAP says "delivered" when the dispatch note is created. The WMS says "delivered" when the pallet leaves the dock. DHL says "delivered" when their driver gets a signature. The local carrier says "delivered" when they hand off to a security guard. The customer says "delivered" when goods receipt is posted in their ERP. Same word. Five meanings. And somewhere between those five meanings, a carton of pressure regulators has gone missing.</p>
+
+    <h2>What Sandra Knows</h2>
+    <p>Sandra has worked customer service for twelve years. When a customer calls, she doesn't follow a script. She follows a pattern: check SAP first for the order status, then the WMS for the physical pick, then the carrier tracking. If the shipment went cross-border, check customs. If DHL handed off to a local carrier, find the handoff reference. She holds all of this in her head. Stefan, who started last month, doesn't know any of it.</p>
+    <p>ZQL captures Sandra's pattern — not as a procedure manual, but as a federated query. "For this order, here's which system to ask each question." At order capture, the query registers which "cantons" of knowledge are relevant: this carrier, this customs route, this customer's receiving hours. When the question comes — "where is my stuff?" — the federation already knows where to look.</p>
+
+    <div class="highlight"><p>"Delivered" means four different things in four different systems. That's not a data quality problem. That's operational intelligence. Each definition reflects a real moment in the physical journey. Destroy the variance and you lose the ability to pinpoint where in the chain something went wrong.</p></div>
+
+    <h2>The Correlation Engine</h2>
+    <p>The hard problem isn't querying systems — it's correlating events across them. SAP uses order numbers. DHL uses tracking numbers. The WMS uses SSCC barcodes. Customs uses declaration references. The customer uses their PO number. Five different identifiers for the same physical shipment.</p>
+    <p>ZQL's correlation engine matches events by multiple signals: reference number overlaps, time-window proximity, physical markers, and weight tolerances. When a customer calls about PO-FSAB-2026-12445, the engine traces it to SAP order ARB-2026-00412, WMS pick batch PB-20260120-003, DHL tracking 1234567890, customs declaration CH-2026-EX-78923, and local carrier handoff VDB-20260123-0089. The complete picture — from warehouse pick to customer receiving — assembled in seconds from six independent systems.</p>
+
+    <h2>The Missing Carton</h2>
+    <p>The Rotterdam customer received three cartons but expected four. The stickers on the cartons read A, B, D. Where's C? No barcode scanner needed. No system lookup needed. The letter sequence — printed at the warehouse as part of ZQL's visual correlation layer — tells the dock worker instantly what's missing. The regulators. Carton C was separated during a carrier handoff at the Dutch border. Van der Berg Transport picked up three cartons from DHL's Rotterdam hub but the fourth was still in the DHL sort facility.</p>
+    <p>Without federation: the customer calls, Sandra searches five systems for fifteen minutes, makes two phone calls, and emails the carrier. Resolution: next day.</p>
+    <p>With federation: the system already knows. The correlation engine flagged the partial delivery when DHL's handoff event showed three cartons against a four-carton shipment. Sandra's screen shows the gap before the customer calls. Resolution: thirty seconds.</p>
+
+    <div class="highlight"><p>Fifteen minutes to thirty seconds. Not because the technology is faster — because the question is already answered before anyone asks it. Federation means the gap between "problem visible" and "someone who can act" collapses to zero.</p></div>
+
+  </div>
+</section>
+
+<section class="case-cta">
+  <h3>How long does it take your team to answer "where's my order?"</h3>
+  <p>We'll build a federated WISMO view across your systems — live data, read-only, your actual order flow.</p>
+  <a href="https://calendly.com/zql" class="case-cta-btn" target="_blank" rel="noopener">Book a Call</a>
+  <br><a href="../#portfolio" class="case-back-link">← Back to all cases</a>
+</section>
+
+<footer>ZQL LLC (Switzerland) · atozql.com</footer>
+
+<script>
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+</script>
+</body>
+</html>
