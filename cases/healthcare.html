@@ -8,41 +8,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../casestyle.css">
 
 
 
-<style>
-.nav-mark { font-family: var(--serif); font-size: 1.2rem; color: #fff; text-decoration: none; } .nav-mark span { color: var(--gold); }
-.nav-back { color: var(--text-light); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; } .nav-back:hover { color: #fff; }
-.case-hero { background: var(--navy-deep); padding: 7rem 2rem 4rem; position: relative; } .case-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); }
-.case-hero-inner { max-width: 900px; margin: 0 auto; }
-.case-sector { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; } .case-sector span { font-size: 1rem; }
-.case-question { font-family: var(--serif); font-style: italic; font-size: clamp(2.2rem, 5vw, 3.5rem); color: #fff; line-height: 1.1; margin-bottom: 1.2rem; }
-.case-lede { font-size: 1.1rem; color: var(--text-on-dark); max-width: 650px; line-height: 1.75; }
-.case-systems { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
-.case-systems span { font-size: 0.72rem; font-weight: 500; background: var(--navy-light); color: var(--text-light); padding: 0.3rem 0.7rem; border-radius: 3px; border: 1px solid rgba(201,168,76,0.15); }
-.case-gallery { background: var(--navy); padding: 3rem 2rem; }
-.case-gallery-inner { max-width: 1100px; margin: 0 auto; }
-.case-gallery-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
-.case-screenshots { display: grid; gap: 1rem; } .case-screenshots.two-up { grid-template-columns: 1fr 1fr; } .case-screenshots.single { grid-template-columns: 1fr; }
-.case-shot { border-radius: 6px; overflow: hidden; border: 1px solid rgba(201,168,76,0.1); position: relative; }
-.case-shot img { width: 100%; height: auto; display: block; }
-.case-shot-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(19,28,51,0.92)); padding: 2rem 1.2rem 1rem; }
-.case-shot-caption p { color: var(--text-on-dark); font-size: 0.82rem; line-height: 1.5; } .case-shot-caption strong { color: #fff; }
-.case-narrative { padding: 4rem 2rem; background: var(--offwhite); }
-.case-narrative-inner { max-width: 720px; margin: 0 auto; }
-.case-narrative h2 { font-family: var(--serif); font-size: 1.6rem; color: var(--text-dark); margin: 2.5rem 0 0.8rem; line-height: 1.2; } .case-narrative h2:first-child { margin-top: 0; }
-.case-narrative p { font-size: 0.95rem; color: var(--text-body); line-height: 1.8; margin-bottom: 1rem; }
-.case-narrative .highlight { background: var(--gold-dim); border-left: 3px solid var(--gold); padding: 1.2rem 1.5rem; border-radius: 0 4px 4px 0; margin: 1.5rem 0; }
-.case-narrative .highlight p { margin-bottom: 0; color: var(--text-dark); font-weight: 500; }
-.case-cta { background: var(--cream); padding: 4rem 2rem; text-align: center; }
-.case-cta h3 { font-family: var(--serif); font-size: 1.5rem; color: var(--text-dark); margin-bottom: 0.5rem; }
-.case-cta p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
-.case-cta-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--gold); color: var(--navy); padding: 0.75rem 1.8rem; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.92rem; transition: all 0.2s; } .case-cta-btn:hover { background: var(--gold-soft); transform: translateY(-1px); }
-.case-back-link { display: inline-block; margin-top: 1rem; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; } .case-back-link:hover { color: var(--text-dark); }
-footer { background: var(--navy); padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.78rem; }
-@media (max-width: 768px) { .case-screenshots.two-up { grid-template-columns: 1fr; } .case-hero { padding: 6rem 1.5rem 3rem; } }
-</style>
+
 </head>
 <body>
 
@@ -67,30 +37,21 @@ footer { background: var(--navy); padding: 2rem; text-align: center; color: var(
 <section class="case-gallery">
   <div class="case-gallery-inner">
     <div class="case-gallery-label">Working Demonstration</div>
-    <div class="case-screenshots two-up">
+    <div class="case-screenshots single">
       <div class="case-shot">
-        <img src="../img/nhs-federation.jpg" alt="NHS Federated Queries — staffing, beds, theatre, A&E scenarios across trusts">
+        <img src="img/next_available_bed.png"
+          alt="Network Federation — European distribution network with order tracing and semantic variance display">
         <div class="case-shot-caption">
-          <p><strong>10 federated query scenarios</strong> covering staffing, beds, theatre, A&E, waiting lists, DTOC, diagnostics, cancer, pharmacy, and infection — each revealing how trusts define the same concept differently.</p>
-        </div>
-      </div>
-      <div class="case-shot">
-        <img src="../img/nhs-beds-detail.jpg" alt="Trust-by-trust comparison showing different local interpretations of nursing staff availability">
-        <div class="case-shot-caption">
-          <p><strong>Same question, different truth.</strong> Imperial counts headcount (234). UCLH counts whole-time equivalents (198.4). Same question — "how many nurses?" — two valid, incompatible answers.</p>
+            <p><strong>10 federated query scenarios</strong> covering staffing, beds, theatre, A&E, waiting lists, DTOC,
+              diagnostics, cancer, pharmacy, and infection — each revealing how trusts define the same concept differently.</p>   </p>
         </div>
       </div>
     </div>
-    <div class="case-screenshots single" style="margin-top: 1rem;">
-      <div class="case-shot">
-        <img src="../img/zql-dungeons-nhs.jpg" alt="Interactive NHS federation query interface showing federated sources and vocabulary mapping">
-        <div class="case-shot-caption">
-          <p><strong>Interactive query interface.</strong> Federation sources (Manchester, Leeds, Birmingham) with vocabulary mapping. "Waiting" means RTT at Manchester, total pathways at Leeds, adjusted RTT at Birmingham. The query handles all three.</p>
-        </div>
-      </div>
-    </div>
+
   </div>
 </section>
+
+
 
 <section class="case-narrative">
   <div class="case-narrative-inner">
